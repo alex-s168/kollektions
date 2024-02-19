@@ -76,6 +76,9 @@ struct CompileData target_kollektions_files[] = {
         { .type = CT_C, .srcFile = "static_list/init_and_clear.c", .outFile = "build/static_list/init_and_clear.o" },
         { .type = CT_C, .srcFile = "static_list/insertAt_and_insertAllAt.c", .outFile = "build/static_list/insertAt_and_insertAllAt.o" },
         { .type = CT_C, .srcFile = "static_list/removeAt_and_removeRange.c", .outFile = "build/static_list/removeAt_and_removeRange.o" },
+
+        { .type = CT_C, .srcFile = "blocking_list/access.c", .outFile = "build/blocking_list/access.o" },
+        { .type = CT_C, .srcFile = "blocking_list/init_and_destroy.c", .outFile = "build/blocking_list/init_and_destroy.o" },
 };
 
 #define TARGET_KOLLEKTIONS_FILES_LEN (sizeof(target_kollektions_files) / sizeof(target_kollektions_files[0]))
