@@ -2,9 +2,9 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#define CC  "tcc"
-#define CXX "C:\\Users\\super\\.konan\\dependencies\\msys2-mingw-w64-x86_64-2\\bin\\g++.exe"
-#define AR  "C:\\Users\\super\\.konan\\dependencies\\msys2-mingw-w64-x86_64-2\\bin\\ar.exe"
+#define CC  "gcc"
+#define CXX "g++"
+#define AR  "ar"
 
 #include <stdlib.h>
 #include <stdio.h>
