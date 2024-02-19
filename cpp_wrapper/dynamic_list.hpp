@@ -1,94 +1,28 @@
 //
-// Created by Alexander Nutz on 17/02/2024.
+// Created by alexander.nutz on 19/02/2024.
 //
 
-#ifndef KOLLEKTIONS_KOLLEKTIONS_CPP_HPP
-#define KOLLEKTIONS_KOLLEKTIONS_CPP_HPP
+#ifndef KOLLEKTIONS_DYNAMIC_LIST_H
+#define KOLLEKTIONS_DYNAMIC_LIST_H
 
-#include <cstddef>
-#include <vector>
-#include <list>
-#include <stdexcept>
-
-#include "kallok_cpp.hpp"
+#include "c.hpp"
+#include "exception.hpp"
+#include "fixed_list.hpp"
+#include "static_list.hpp"
+#include "../kallok_cpp.hpp"
 
 namespace kollektions {
-    namespace c {
-#include "lists.h"
-    }
-
-    class IncompatibleStrideException: public std::exception
-    {
-        [[nodiscard]] const char * what() const noexcept override {
-            return "Incompatible stride. = Incompatible types";
-        }
-    };
-
-    template <typename T>
-    class DynamicList;
-
-    template <typename T>
-    class FixedList {
-    public:
-        kollektions::c::FixedList cFixed {
-            .stride = sizeof(T)
-        };
-
-        FixedList() = delete;
-
-        explicit FixedList(kollektions::c::FixedList list) {
-            if (list.stride != sizeof(T))
-                throw kollektions::IncompatibleStrideException();
-
-            cFixed.data = list.data;
-            cFixed.len = list.len;
-        }
-
-        explicit FixedList(std::vector<T> source) {
-            cFixed.len = source.size();
-            cFixed.data = source.data();
-        }
-
-        explicit FixedList(T *arr, size_t len) {
-            cFixed.len = len;
-            cFixed.data = arr;
-        }
-
-        inline int indexOf(T elem) {
-            return kollektions::c::FixedList_indexOf(cFixed, elem);
-        }
-
-        inline int indexOfLast(T elem) {
-            return kollektions::c::FixedList_indexOfLast(cFixed, elem);
-        }
-
-        inline T operator[](size_t index) {
-            return * (T *) kollektions::c::FixedList_get(cFixed, index);
-        }
-
-        inline kollektions::DynamicList<T> copy(kallok::Ally ally = kallok::getLIBCAlloc(),
-                                                size_t additionalCap = 0) {
-            auto list = kollektions::c::DynamicList {};
-            kollektions::c::FixedList_copy(cFixed, &list, ally, additionalCap);
-            return kollektions::DynamicList<T>(list);
-        }
-
-        inline size_t length() {
-            return cFixed.len;
-        }
-
-        inline void *data() {
-            return cFixed.data;
-        }
-    };
-
+    /**
+     * A dynamic-capacity, dynamic-length list
+     * @tparam T
+     */
     template <typename T>
     class DynamicList: public kollektions::FixedList<T> {
     public:
         kollektions::c::DynamicList cDyn {};
 
         explicit DynamicList(kollektions::c::DynamicList list):
-        kollektions::FixedList<T>(list.fixed) {
+                kollektions::FixedList<T>(list.fixed) {
             if (list.fixed.stride != sizeof(T))
                 throw kollektions::IncompatibleStrideException();
             cDyn.fixed = list.fixed;
@@ -96,22 +30,25 @@ namespace kollektions {
             cDyn.ally = list.ally;
         }
 
-//        explicit DynamicList(kallok::Ally allocator = kallok::getLIBCAlloc(),
-//                             size_t initCap = 0):
-//        kollektions::FixedList<T>(cDyn.fixed) {
-//            kollektions::c::DynamicList_init(&cDyn, sizeof(T), allocator, initCap);
-//        }
-
         static kollektions::DynamicList<T> create(
                 kallok::Ally allocator = kallok::getLIBCAlloc(),
                 size_t initCap = 0) {
-            auto list = kollektions::DynamicList<T>({ .fixed = { .stride = sizeof(T) } });
-            kollektions::c::DynamicList_init(&list.cDyn, sizeof(T), allocator, initCap);
+            auto list = kollektions::DynamicList<T>({
+                                                            .fixed = { .stride = sizeof(T) }
+                                                    });
+            kollektions::c::DynamicList_init(&list.cDyn,
+                                             sizeof(T),
+                                             allocator,
+                                             initCap);
             return list;
         }
 
         ~DynamicList() {
             kollektions::c::DynamicList_clear(&cDyn);
+        }
+
+        inline size_t capacity() {
+            return cDyn.cap;
         }
 
         inline void add(T element) {
@@ -191,11 +128,10 @@ namespace kollektions {
         /**
          * Shrinks the list allocation to be as big as the list.
          */
-         inline void shrink() {
-             kollektions::c::DynamicList_shrink(&cDyn);
-         }
+        inline void shrink() {
+            kollektions::c::DynamicList_shrink(&cDyn);
+        }
     };
 }
 
-
-#endif //KOLLEKTIONS_KOLLEKTIONS_CPP_HPP
+#endif //KOLLEKTIONS_DYNAMIC_LIST_H

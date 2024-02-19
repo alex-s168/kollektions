@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "kollektions_cpp.hpp"
+#include "cpp_wrapper/kollektions.hpp"
 
 int main() {
     auto list = kollektions::DynamicList<int>::create();
