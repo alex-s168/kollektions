@@ -14,4 +14,4 @@ Collection framework written in C with wrappers for the following programming la
 This repository currently contains two libraries: `kallok` and `kollektions`.
 To build them, you need to first compile the independent `build.c` file.
 But first you should configure some options that can be found in the top of the `build.c` file.
-Then run: `./build kallok.a` and `./build kollektions.a`. The output static-libraries will be located in the `build/` directory.
+Then run: `./build.exe kallok.a` and `./build.exe kollektions.a`. The output static-libraries will be located in the `build/` directory.

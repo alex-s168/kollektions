@@ -17,7 +17,10 @@ void DynamicList_reserve(struct DynamicList *list, size_t additional) {
 
     new = (new + 3) & ~3;
 
-    list->ally.impl->realloc(list->ally.state, list->fixed.data, list->cap, new);
+    list->fixed.data = list->ally.impl->realloc(list->ally.state,
+                                                list->fixed.data,
+                                                list->cap * list->fixed.stride,
+                                                new * list->fixed.stride);
     list->cap = new;
 }
 
@@ -32,7 +35,10 @@ void DynamicList_reserveExact(struct DynamicList *list, size_t additional) {
     if (new <= list->cap)
         return;
 
-    list->ally.impl->realloc(list->ally.state, list->fixed.data, list->cap, new);
+    list->fixed.data = list->ally.impl->realloc(list->ally.state,
+                                                list->fixed.data,
+                                                list->cap * list->fixed.stride,
+                                                new * list->fixed.stride);
     list->cap = new;
 }
 
@@ -44,6 +50,9 @@ void DynamicList_shrink(struct DynamicList *list) {
     if (list->cap == list->fixed.len)
         return;
 
-    list->ally.impl->realloc(list->ally.state, list->fixed.data, list->cap, list->fixed.len);
+    list->fixed.data = list->ally.impl->realloc(list->ally.state,
+                                                list->fixed.data,
+                                                list->cap * list->fixed.stride,
+                                                list->fixed.len * list->fixed.stride);
     list->cap = list->fixed.len;
 }

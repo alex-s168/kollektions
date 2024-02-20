@@ -27,6 +27,11 @@ typedef struct {
 
 Ally getLIBCAlloc();
 
+// A simple memory allocator that allocates elements in a fixed-length array.
+// Does not have any memory-degragmentation features
+Ally createFixedBasicAlloc(void *data, size_t limit);
+void destroyFixedBasicAlloc(Ally ally);
+
 #ifdef __cplusplus
 }
 }
