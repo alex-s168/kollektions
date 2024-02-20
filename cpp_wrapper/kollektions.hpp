@@ -10,7 +10,7 @@
 #include <list>
 #include <stdexcept>
 
-#include "../kallok_cpp.hpp"
+#include "../kallok.h"
 
 #include "c.hpp"
 #include "exception.hpp"

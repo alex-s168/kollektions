@@ -1,9 +1,11 @@
 //
-// Created by alexander.nutz on 19/02/2024.
+// Created by Alexande NNutz on 19/02/2024.
 //
 
 #ifndef KOLLEKTIONS_EXCEPTION_H
 #define KOLLEKTIONS_EXCEPTION_H
+
+#include <exception>
 
 namespace kollektions {
     class IncompatibleStrideException : public std::exception {

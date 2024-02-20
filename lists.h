@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+#include "kallok.h"
 #include "fixed_list.h"
 #include "dynamic_list.h"
 #include "static_list.h"

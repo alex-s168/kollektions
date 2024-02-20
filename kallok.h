@@ -6,6 +6,7 @@
 #define KOLLEKTIONS_KALLOK_H
 
 #ifdef __cplusplus
+namespace kallok {
 extern "C" {
 #endif
 
@@ -27,6 +28,7 @@ typedef struct {
 Ally getLIBCAlloc();
 
 #ifdef __cplusplus
+}
 }
 #define KALLOK_PREFIX kallok::
 #else

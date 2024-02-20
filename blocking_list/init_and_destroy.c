@@ -3,6 +3,7 @@
 //
 
 #include "../blocking_list.h"
+#include <pthread.h>
 
 /**
  * Initializes a normal BlockingList
@@ -30,7 +31,7 @@ void BlockingList_init(struct BlockingList *list, size_t stride,
 void BlockingList_initManyReader(struct BlockingList *list, size_t stride,
                                  Ally ally, size_t initCap) {
     list->useMutex = false;
-    // TODO
+    pthread_rwlock_init(&list->rwlock, NULL);
     DynamicList_init(&list->dyn, stride, ally, initCap);
 }
 
@@ -42,6 +43,6 @@ void BlockingList_destroy(struct BlockingList *list) {
     if (list->useMutex) {
         pthread_mutex_destroy(&list->mutex);
     } else {
-        // TODO
+        pthread_rwlock_destroy(&list->rwlock);
     }
 }

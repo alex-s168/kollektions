@@ -13,6 +13,7 @@ extern "C" {
 #include <pthread.h>
 #include <stdbool.h>
 
+#include "kallok.h"
 #include "dynamic_list.h"
 #include "kallok.h"
 #include "attrib.h"
