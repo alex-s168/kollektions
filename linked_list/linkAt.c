@@ -17,8 +17,8 @@ struct DoubleLinkedElement *DoubleLinkedList_linkAt(struct DoubleLinkedList *lis
             elem = elem->next;
             curr ++;
         }
-        return curr;
-    } else if (index > sizeH) {
+        return elem;
+    } else {
         // High half
         size_t curr = list->size - 1;
         struct DoubleLinkedElement *elem = list->end;
@@ -26,5 +26,6 @@ struct DoubleLinkedElement *DoubleLinkedList_linkAt(struct DoubleLinkedList *lis
             elem = elem->prev;
             curr --;
         }
+        return elem;
     }
 }

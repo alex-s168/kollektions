@@ -2,9 +2,15 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#define CC  "clang"
-#define CXX "clang++"
-#define AR  "ar"
+#define CC        "clang"
+#define CC_ARGS   "-O2"
+
+#define CXX       "clang++"
+#define CXX_ARGS  "-O2"
+
+#define AR        "ar"
+
+#define LD_ARGS   ""
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,10 +51,13 @@ bool exists(char *file) {
     return access(file, F_OK) == 0;
 }
 
+#define SP(typeIn, file) { .type = typeIn, .srcFile = file, .outFile = "build/" #file ".o" }
+#define DEP(file) { .type = CT_DEP, .srcFile = "", .outFile = file }
+
 /* ========================================================================= */
 
 struct CompileData target_kallok_files[] = {
-        { .type = CT_C, .srcFile = "alloc/libc.c", .outFile = "build/alloc/libc.o" }
+    SP(CT_C, "alloc/libc.c"),
 };
 
 #define TARGET_KALLOK_FILES_LEN (sizeof(target_kallok_files) / sizeof(target_kallok_files[0]))
@@ -65,24 +74,36 @@ enum CompileResult target_kallok() {
 /* ========================================================================= */
 
 struct CompileData target_kollektions_files[] = {
-        { .type = CT_C, .srcFile = "dynamic_list/add_and_addAll.c", .outFile = "build/dynamic_list/add_and_addAll.o" },
-        { .type = CT_C, .srcFile = "dynamic_list/init_and_clear.c", .outFile = "build/dynamic_list/init_and_clear.o" },
-        { .type = CT_C, .srcFile = "dynamic_list/insertAt_and_insertAllAt.c", .outFile = "build/dynamic_list/insertAt_and_insertAllAt.o" },
-        { .type = CT_C, .srcFile = "dynamic_list/removeAt_and_removeRange.c", .outFile = "build/dynamic_list/removeAt_and_removeRange.o" },
-        { .type = CT_C, .srcFile = "dynamic_list/reserve_and_shrink.c", .outFile = "build/dynamic_list/reserve_and_shrink.o" },
+    SP(CT_C, "dynamic_list/add_and_addAll.c"),
+    SP(CT_C, "dynamic_list/init_and_clear.c"),
+    SP(CT_C, "dynamic_list/insertAt_and_insertAllAt.c"),
+    SP(CT_C, "dynamic_list/removeAt_and_removeRange.c"),
+    SP(CT_C, "dynamic_list/reserve_and_shrink.c"),
 
-        { .type = CT_C, .srcFile = "fixed_list/get_and_set.c", .outFile = "build/fixed_list/get_and_set.o" },
-        { .type = CT_C, .srcFile = "fixed_list/indexOf.c", .outFile = "build/fixed_list/indexOf.o" },
+    SP(CT_C, "fixed_list/get_and_set.c"),
+    SP(CT_C, "fixed_list/indexOf.c"),
 
-        { .type = CT_C, .srcFile = "lists/copy.c", .outFile = "build/lists/copy.o" },
+    SP(CT_C, "lists/copy.c"),
 
-        { .type = CT_C, .srcFile = "static_list/add_and_addAll.c", .outFile = "build/static_list/add_and_addAll.o" },
-        { .type = CT_C, .srcFile = "static_list/init_and_clear.c", .outFile = "build/static_list/init_and_clear.o" },
-        { .type = CT_C, .srcFile = "static_list/insertAt_and_insertAllAt.c", .outFile = "build/static_list/insertAt_and_insertAllAt.o" },
-        { .type = CT_C, .srcFile = "static_list/removeAt_and_removeRange.c", .outFile = "build/static_list/removeAt_and_removeRange.o" },
+    SP(CT_C, "static_list/add_and_addAll.c"),
+    SP(CT_C, "static_list/init_and_clear.c"),
+    SP(CT_C, "static_list/insertAt_and_insertAllAt.c"),
+    SP(CT_C, "static_list/removeAt_and_removeRange.c"),
 
-        { .type = CT_C, .srcFile = "blocking_list/access.c", .outFile = "build/blocking_list/access.o" },
-        { .type = CT_C, .srcFile = "blocking_list/init_and_destroy.c", .outFile = "build/blocking_list/init_and_destroy.o" },
+    SP(CT_C, "blocking_list/access.c"),
+    SP(CT_C, "blocking_list/init_and_destroy.c"),
+
+    SP(CT_C, "linked_list/add.c"),
+    SP(CT_C, "linked_list/addAll.c"),
+    SP(CT_C, "linked_list/clear.c"),
+    SP(CT_C, "linked_list/find.c"),
+    SP(CT_C, "linked_list/findLast.c"),
+    SP(CT_C, "linked_list/flatten.c"),
+    SP(CT_C, "linked_list/fromFixed.c"),
+    SP(CT_C, "linked_list/fromLinks.c"),
+    SP(CT_C, "linked_list/linkAt.c"),
+    SP(CT_C, "linked_list/remove.c"),
+    SP(CT_C, "linked_list/removeMultiple.c"),
 };
 
 #define TARGET_KOLLEKTIONS_FILES_LEN (sizeof(target_kollektions_files) / sizeof(target_kollektions_files[0]))
@@ -99,12 +120,10 @@ enum CompileResult target_kollektions() {
 /* ========================================================================= */
 
 struct CompileData target_test_cpp_files[] = {
-        // sources:
-        { .type = CT_CXX, .srcFile = "test_cpp.cpp", .outFile = "build/test_cpp.o" },
+    SP(CT_CXX, "test_cpp.cpp"),
 
-        // dependencies:
-        { .type = CT_DEP, .srcFile = "", .outFile = "build/kallok.a" },
-        { .type = CT_DEP, .srcFile = "", .outFile = "build/kollektions.a" },
+    DEP("build/kallok.a"),
+    DEP("build/kollektions.a"),
 };
 
 #define TARGET_TEST_CPP_FILES_LEN (sizeof(target_test_cpp_files) / sizeof(target_test_cpp_files[0]))
@@ -125,12 +144,10 @@ enum CompileResult target_test_cpp() {
 /* ========================================================================= */
 
 struct CompileData target_test_list_files[] = {
-	// sources:
-	{ .type = CT_C, .srcFile = "test_list.c", .outFile = "build/test_list.o" },
+	SP(CT_C, "test_list.c"),
 
-	// dependencies:
-	{ .type = CT_DEP, .srcFile = "", .outFile = "build/kallok.a" },
-        { .type = CT_DEP, .srcFile = "", .outFile = "build/kollektions.a" },
+    DEP("build/kallok.a"),
+    DEP("build/kollektions.a"),
 };
 
 #define TARGET_TEST_LIST_FILES_LEN (sizeof(target_test_list_files) / sizeof(target_test_list_files[0]))
@@ -204,9 +221,9 @@ void *compileThread(void *arg) {
     struct CompileData *data = arg;
     if (data->type == CT_C) {
         char *args = malloc(strlen(data->srcFile) + strlen(data->outFile) +
-                            sizeof(CC) + 9);
+                            sizeof(CC) + 9 + sizeof(CC_ARGS));
         args[0] = '\0';
-        sprintf(args, "%s -c %s -o %s", CC, data->srcFile, data->outFile);
+        sprintf(args, "%s -c %s -o %s " CC_ARGS, CC, data->srcFile, data->outFile);
 
         int res = system(args);
         free(args);
@@ -216,9 +233,9 @@ void *compileThread(void *arg) {
         }
     } else if (data->type == CT_CXX) {
         char *args = malloc(strlen(data->srcFile) + strlen(data->outFile) +
-                            sizeof(CXX) + 9);
+                            sizeof(CXX) + 9 + sizeof(CXX_ARGS));
         args[0] = '\0';
-        sprintf(args, "%s -c %s -o %s", CXX, data->srcFile, data->outFile);
+        sprintf(args, "%s -c %s -o %s" CXX_ARGS, CXX, data->srcFile, data->outFile);
 
         int res = system(args);
         free(args);
@@ -252,13 +269,13 @@ enum CompileResult linkTask(struct CompileData *objs, size_t len, char *out) {
 }
 
 enum CompileResult link_exe(struct CompileData *objs, size_t len, char *out) {
-    size_t sl = strlen(out) + 5 + sizeof(CC);
+    size_t sl = strlen(out) + 5 + sizeof(CC) + sizeof(LD_ARGS);
     for (size_t i = 0; i < len; i ++) {
         sl += strlen(objs[i].outFile) + 1;
     }
     char *cmd = malloc(sl);
     cmd[0] = '\0';
-    sprintf(cmd, "%s -o %s ", CC, out);
+    sprintf(cmd, "%s -o %s " LD_ARGS " ", CC, out);
 
     for (size_t i = 0; i < len; i ++) {
         strcat(cmd, objs[i].outFile);

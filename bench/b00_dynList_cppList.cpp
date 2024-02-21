@@ -6,7 +6,7 @@ int main() {
 
     std::size_t i = 1000;
     while (i --> 0)
-        list.push_back(i);
+        list.emplace_back(i);
 
     list.clear();
 

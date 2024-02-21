@@ -6,7 +6,7 @@ int main() {
     struct DynamicList list;
     DynamicList_init(&list, sizeof(size_t), ally, 0);
 
-    size_t i = 1000;
+    size_t i = 1000000;
     while (i --> 0)
         DynamicList_add(&list, &i);
 

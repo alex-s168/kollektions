@@ -9,7 +9,7 @@
  */
 void DoubleLinkedList_clear(struct DoubleLinkedList *list) {
     struct DoubleLinkedElement *elem = list->start;
-    while (elem->next != NULL) {
+    while (elem != NULL) {
         struct DoubleLinkedElement *next = elem->next;
         list->ally.impl->free(list->ally.state, elem, sizeof(struct DoubleLinkedElement) + list->stride);
         elem = next;

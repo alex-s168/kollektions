@@ -20,7 +20,8 @@ void DoubleLinkedList_add(struct DoubleLinkedList *list, void *data) {
     memcpy(DoubleLinkedElement_data(elem), data, list->stride);
     elem->next = NULL;
     elem->prev = list->end;
-    list->end->next = elem;
+    if (list->end != NULL)
+        list->end->next = elem;
     list->end = elem;
     list->size += 1;
 }
@@ -34,7 +35,8 @@ void DoubleLinkedList_addFront(struct DoubleLinkedList *list, void *data) {
     memcpy(DoubleLinkedElement_data(elem), data, list->stride);
     elem->prev = NULL;
     elem->next = list->start;
-    list->start->prev = elem;
+    if (list->start != NULL)
+        list->start->prev = elem;
     list->start = elem;
     list->size += 1;
 }

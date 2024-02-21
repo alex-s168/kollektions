@@ -42,7 +42,7 @@ int FixedList_indexOfLast(struct FixedList list, void *data);
  * @return The pointer to the element
  */
 static inline void *FixedList_get(struct FixedList list, size_t index) {
-    return list.data + list.stride * index;
+    return (char *) list.data + list.stride * index;
 }
 
 /**

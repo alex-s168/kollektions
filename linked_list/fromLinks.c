@@ -11,13 +11,13 @@ static struct DoubleLinkedElement *allocElem(struct DoubleLinkedList *list) {
                                   sizeof(struct DoubleLinkedElement) + list->stride);
 }
 
-static void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list, const struct DoubleLinkedElement *first, const struct DoubleLinkedElement *last, size_t stride, KALLOK_PREFIX Ally ally) {
+void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list, const struct DoubleLinkedElement *first, const struct DoubleLinkedElement *last, size_t stride, KALLOK_PREFIX Ally ally) {
     list->ally = ally;
     list->stride = stride;
     if (first == NULL || last == NULL) {
         list->start = NULL;
         list->end = NULL;
-        list->size = NULL;
+        list->size = 0;
         return;
     }
     struct DoubleLinkedElement *prev = NULL;

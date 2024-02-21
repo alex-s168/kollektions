@@ -5,12 +5,12 @@
 #ifndef KOLLEKTIONS_KALLOK_H
 #define KOLLEKTIONS_KALLOK_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 namespace kallok {
 extern "C" {
 #endif
-
-#include <stddef.h>
 
 typedef struct {
     void (*free)(void *state, void *alloc, size_t old);
