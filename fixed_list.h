@@ -41,7 +41,9 @@ int FixedList_indexOfLast(struct FixedList list, void *data);
  * @param index The index of the element
  * @return The pointer to the element
  */
-void *FixedList_get(struct FixedList list, size_t index);
+static inline void *FixedList_get(struct FixedList list, size_t index) {
+    return list.data + list.stride * index;
+}
 
 /**
  * @param list Self

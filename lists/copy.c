@@ -31,5 +31,8 @@ void DynamicList_copy(struct DynamicList list,
                       struct DynamicList *dest,
                       Ally ally,
                       size_t additionalCap) {
-    return FixedList_copy(list.fixed, dest, ally, additionalCap);
+    return FixedList_copy(list.fixed,
+                          dest,
+                          ally,
+                          additionalCap);
 }

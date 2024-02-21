@@ -13,11 +13,13 @@ extern "C" {
 
 #include "fixed_list.h"
 #include "kallok.h"
+#include "attrib.h"
 
 struct DynamicList {
     struct FixedList fixed;
     size_t cap;
 
+INTERNAL
     KALLOK_PREFIX Ally ally;
 };
 
