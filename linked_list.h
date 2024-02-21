@@ -24,6 +24,24 @@ static inline void *DoubleLinkedElement_data(struct DoubleLinkedElement *elem) {
     return elem + sizeof(struct DoubleLinkedElement);
 }
 
+static struct DoubleLinkedElement *DoubleLinkedElement_goRight(struct DoubleLinkedElement *elem, size_t amount) {
+    for (size_t i = 0; i < amount; i ++) {
+        if (elem == NULL)
+            return NULL;
+        elem = elem->next;
+    }
+    return elem;
+}
+
+static struct DoubleLinkedElement *DoubleLinkedElement_goLeft(struct DoubleLinkedElement *elem, size_t amount) {
+    for (size_t i = 0; i < amount; i ++) {
+        if (elem == NULL)
+            return NULL;
+        elem = elem->prev;
+    }
+    return elem;
+}
+
 struct DoubleLinkedList {
     size_t size;
     size_t stride;
@@ -40,6 +58,41 @@ static void DoubleLinkedList_init(struct DoubleLinkedList *list, size_t stride, 
     list->start = NULL;
     list->end = NULL;
     list->ally = ally;
+}
+
+/**
+ * Creates a new DoubleLinkedList and copies [fixed] into it.
+ * @param list
+ * @param fixed
+ */
+void DoubleLinkedList_fromFixed(struct DoubleLinkedList *list,
+                                KALLOK_PREFIX Ally ally,
+                                struct FixedList fixed);
+
+/**
+ * Creates a new DoubleLinkedList and copies the linked elements from [first] (inclusive) to [last] (inclusive) into it
+ * @param list
+ * @param first
+ * @param last
+ * @param stride
+ * @param ally
+ */
+void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list,
+                                const struct DoubleLinkedElement *first,
+                                const struct DoubleLinkedElement *last,
+                                size_t stride,
+                                KALLOK_PREFIX Ally ally);
+
+/**
+ * Creates a new DoubleLinkedList and copies all the data from [src] into it.
+ * Does not clear source.
+ * @param dest
+ * @param src
+ */
+static void DoubleLinkedList_copy(struct DoubleLinkedList *dest,
+                                  struct DoubleLinkedList *src,
+                                  KALLOK_PREFIX Ally ally) {
+    DoubleLinkedList_fromLinks(dest, src->start, src->end, src->stride, ally);
 }
 
 /**
@@ -89,15 +142,19 @@ void DoubleLinkedList_addFront(struct DoubleLinkedList *list, void *data);
 
 /**
  * @param list Self
- * @param data The array of elements
+ * @param data The list of elements.
+ * The allocator needs to be exactly the same (a.impl == b.impl && a.state == b.state)
+ * The old list will be cleared.
  */
-void DoubleLinkedList_addAll(struct DoubleLinkedList *list, void *data, size_t len);
+void DoubleLinkedList_addAll(struct DoubleLinkedList *list, struct DoubleLinkedList *data);
 
 /**
  * @param list Self
- * @param data The array of elements
+ * @param data The list of elements.
+ * The allocator needs to be exactly the same (a.impl == b.impl && a.state == b.state)
+ * The old list will be cleared.
  */
-void DoubleLinkedList_addAllFront(struct DoubleLinkedList *list, void *data, size_t len);
+void DoubleLinkedList_addAllFront(struct DoubleLinkedList *list, struct DoubleLinkedList *data);
 
 /**
  * @param list Self
