@@ -27,6 +27,17 @@ typedef struct {
 
 Ally getLIBCAlloc();
 
+struct AllyStats {
+    Ally parent;
+    size_t allocs;
+    size_t frees;
+    size_t reallocs;
+};
+Ally getStatAlloc(Ally parent, struct AllyStats *statisticDest);
+#ifdef _INC_STDIO
+void outputStats(struct AllyStats *stats, FILE *dest);
+#endif
+
 // A simple memory allocator that allocates elements in a fixed-length array.
 // Does not have any memory-degragmentation features
 Ally createFixedBasicAlloc(void *data, size_t limit);
