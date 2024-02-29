@@ -51,4 +51,6 @@ void destroyFixedBasicAlloc(Ally ally);
 #define KALLOK_PREFIX /* */
 #endif
 
+#include "kallok_pages.h"
+
 #endif //KOLLEKTIONS_KALLOK_H
