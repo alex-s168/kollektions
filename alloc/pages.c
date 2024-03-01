@@ -31,7 +31,7 @@ struct Page alloc_pages(size_t bytes) {
 
     return (struct Page) {
         .ptr = p,
-        .size = page_size
+        .size = bytes
     };
 }
 
@@ -63,7 +63,7 @@ struct Page alloc_pages(size_t bytes) {
 
     return (struct Page) {
         .ptr = p,
-        .size = page_size
+        .size = bytes
     };
 }
 
@@ -72,7 +72,7 @@ void make_exec(void *ptr, size_t size) {
 }
 
 void free_page(struct Page page) {
-    munmap(page.ptr, page.size)
+    munmap(page.ptr, page.size);
 }
 
 #endif

@@ -10,6 +10,8 @@
 
 #define AR        "ar"
 
+#define MKDIR     "mkdir -p"
+
 #define LD_ARGS   ""
 
 #include <stdlib.h>
@@ -27,6 +29,7 @@ enum CompileType {
     CT_CXX,
     CT_NOC,
     CT_DEP,
+    CT_DIR,
 };
 
 enum CompileResult {
@@ -53,11 +56,17 @@ bool exists(char *file) {
 
 #define SP(typeIn, file) { .type = typeIn, .srcFile = file, .outFile = "build/" #file ".o" }
 #define DEP(file) { .type = CT_DEP, .srcFile = "", .outFile = file }
+#define DIR(dir)  { .type = CT_DIR, .srcFile = "", .outFile = dir }
 
 /* ========================================================================= */
 
 struct CompileData target_kallok_files[] = {
+    DIR("build/"),
+
+    DIR("build/alloc/"),
     SP(CT_C, "alloc/libc.c"),
+    SP(CT_C, "alloc/statistic.c"),
+    SP(CT_C, "alloc/pages.c"),
 };
 
 #define TARGET_KALLOK_FILES_LEN (sizeof(target_kallok_files) / sizeof(target_kallok_files[0]))
@@ -74,25 +83,33 @@ enum CompileResult target_kallok() {
 /* ========================================================================= */
 
 struct CompileData target_kollektions_files[] = {
+    DIR("build/"),
+
+    DIR("build/dynamic_list/"),
     SP(CT_C, "dynamic_list/add_and_addAll.c"),
     SP(CT_C, "dynamic_list/init_and_clear.c"),
     SP(CT_C, "dynamic_list/insertAt_and_insertAllAt.c"),
     SP(CT_C, "dynamic_list/removeAt_and_removeRange.c"),
     SP(CT_C, "dynamic_list/reserve_and_shrink.c"),
 
+    DIR("build/fixed_list/"),
     SP(CT_C, "fixed_list/get_and_set.c"),
     SP(CT_C, "fixed_list/indexOf.c"),
 
+    DIR("build/lists/"),
     SP(CT_C, "lists/copy.c"),
 
+    DIR("build/static_list/"),
     SP(CT_C, "static_list/add_and_addAll.c"),
     SP(CT_C, "static_list/init_and_clear.c"),
     SP(CT_C, "static_list/insertAt_and_insertAllAt.c"),
     SP(CT_C, "static_list/removeAt_and_removeRange.c"),
 
+    DIR("build/blocking_list/"),
     SP(CT_C, "blocking_list/access.c"),
     SP(CT_C, "blocking_list/init_and_destroy.c"),
 
+    DIR("build/linked_list/"),
     SP(CT_C, "linked_list/add.c"),
     SP(CT_C, "linked_list/addAll.c"),
     SP(CT_C, "linked_list/clear.c"),
@@ -120,6 +137,8 @@ enum CompileResult target_kollektions() {
 /* ========================================================================= */
 
 struct CompileData target_test_cpp_files[] = {
+    DIR("build/"),
+
     SP(CT_CXX, "test_cpp.cpp"),
 
     DEP("build/kallok.a"),
@@ -144,7 +163,9 @@ enum CompileResult target_test_cpp() {
 /* ========================================================================= */
 
 struct CompileData target_test_list_files[] = {
-	SP(CT_C, "test_list.c"),
+    DIR("build/"),
+
+    SP(CT_C, "test_list.c"),
 
     DEP("build/kallok.a"),
     DEP("build/kollektions.a"),
@@ -222,7 +243,6 @@ void *compileThread(void *arg) {
     if (data->type == CT_C) {
         char *args = malloc(strlen(data->srcFile) + strlen(data->outFile) +
                             sizeof(CC) + 9 + sizeof(CC_ARGS));
-        args[0] = '\0';
         sprintf(args, "%s -c %s -o %s " CC_ARGS, CC, data->srcFile, data->outFile);
 
         int res = system(args);
@@ -234,8 +254,7 @@ void *compileThread(void *arg) {
     } else if (data->type == CT_CXX) {
         char *args = malloc(strlen(data->srcFile) + strlen(data->outFile) +
                             sizeof(CXX) + 9 + sizeof(CXX_ARGS));
-        args[0] = '\0';
-        sprintf(args, "%s -c %s -o %s" CXX_ARGS, CXX, data->srcFile, data->outFile);
+        sprintf(args, "%s -c %s -o %s " CXX_ARGS, CXX, data->srcFile, data->outFile);
 
         int res = system(args);
         free(args);
@@ -256,8 +275,14 @@ enum CompileResult linkTask(struct CompileData *objs, size_t len, char *out) {
     cmd[0] = '\0';
     sprintf(cmd, "%s rcs %s ", AR, out);
 
+    // yes, we allocate some useless bytes but we just don't care
+
     for (size_t i = 0; i < len; i ++) {
-        strcat(cmd, objs[i].outFile);
+        struct CompileData cd = objs[i];
+        if (cd.type == CT_DIR)
+            continue;
+
+        strcat(cmd, cd.outFile);
         strcat(cmd, " ");
     }
 
@@ -293,7 +318,16 @@ enum CompileResult compile(struct CompileData *objs, size_t len) {
     pthread_t *threads = malloc(sizeof(pthread_t) * len);
 
     for (size_t i = 0; i < len; i ++) {
-        pthread_create(&threads[i], NULL, compileThread, &objs[i]);
+        struct CompileData *data = &objs[i];        
+
+        pthread_create(&threads[i], NULL, compileThread, data);
+
+        if (data->type == CT_DIR) {
+            char *args = malloc(strlen(data->outFile) + sizeof(MKDIR) + 1);
+            sprintf(args, "%s %s", MKDIR, data->outFile);
+            (void) system(args);
+            free(args);
+        }
     }
 
     for (size_t i = 0; i < len; i ++) {
