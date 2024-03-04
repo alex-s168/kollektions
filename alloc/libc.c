@@ -6,15 +6,20 @@
 
 #include <stdlib.h>
 
-void  alloc_libc_free(void *state, void *alloc, size_t old) {
+static void  alloc_libc_free(void *state, void *alloc, size_t old) {
+    (void) state;
+    (void) old;
     return free(alloc);
 }
 
-void *alloc_libc_alloc(void *state, size_t new) {
+static void *alloc_libc_alloc(void *state, size_t new) {
+    (void) state;
     return malloc(new);
 }
 
-void *alloc_libc_realloc(void *state, void *alloc, size_t old, size_t new) {
+static void *alloc_libc_realloc(void *state, void *alloc, size_t old, size_t new) {
+    (void) state;
+    (void) old;
     return realloc(alloc, new);
 }
 

@@ -28,11 +28,11 @@ typedef struct {
 #else
     int fd;
 #endif
-} VirtualAlloc;
+} VirtAlloc;
 
-VirtualAlloc virtualMap(int *err, const char *path);
+VirtAlloc virtualMap(int *err, const char *path);
 
-void virtualUnmap(VirtualAlloc alloc);
+void virtualUnmap(VirtAlloc alloc);
 
 #ifdef __cplusplus
 }

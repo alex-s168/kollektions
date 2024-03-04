@@ -2,13 +2,7 @@
 // Created by Alexander Nutz on 29/02/2024.
 //
 
-#include "../kallok_pages.h"
-
-size_t makeMultiple(size_t x, size_t y) {
-    x += y - 1;
-    x -= x % y;
-    return x;
-}
+#include "../kallok.h"
 
 #if defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
 

@@ -2,13 +2,13 @@
 // Created by Alexander Nutz on 04/03/2024.
 //
 
-#include "../kallok_virtual.h"
+#include "../kallok.h"
 
 #if defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
-VirtualAlloc virtualMap(int *err, const char *file) {
-    VirtualAlloc alloc;
+VirtAlloc virtualMap(int *err, const char *file) {
+    VirtAlloc alloc;
 
-    alloc.hFile = CreateFileA(file, GENERIC_READ | GENERIC_WRITE
+    alloc.hFile = CreateFileA(file, GENERIC_READ | GENERIC_WRITE,
                               0, NULL, OPEN_EXISTING,
                               FILE_ATTRIBUTE_NORMAL, 0);
     if (alloc.hFile == INVALID_HANDLE_VALUE) {
@@ -60,7 +60,7 @@ VirtualAlloc virtualMap(int *err, const char *file) {
     return alloc;
 }
 
-void virtualUnmap(VirtualAlloc alloc) {
+void virtualUnmap(VirtAlloc alloc) {
     UnmapViewOfFile(alloc.data);
     CloseHandle(alloc.hMap);
     CloseHandle(alloc.hFile);
@@ -72,8 +72,8 @@ void virtualUnmap(VirtualAlloc alloc) {
 #include <sys/stat.h>
 #include <fcntl.h>
 
-VirtualAlloc virtualMap(int *err, const char *file) {
-    VirtualAlloc alloc;
+VirtAlloc virtualMap(int *err, const char *file) {
+    VirtAlloc alloc;
     struct stat sb;
     alloc.fd = open(file, O_RDWR);
     fstat(alloc.fd, &sb);
@@ -87,7 +87,7 @@ VirtualAlloc virtualMap(int *err, const char *file) {
     return alloc;
 }
 
-void virtualUnmap(VirtualAlloc alloc) {
+void virtualUnmap(VirtAlloc alloc) {
     munmap(alloc.data, alloc.size);
 }
 

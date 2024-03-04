@@ -12,6 +12,12 @@ namespace kallok {
 extern "C" {
 #endif
 
+static size_t makeMultiple(size_t x, size_t y) {
+    x += y - 1;
+    x -= x % y;
+    return x;
+}
+
 typedef struct {
     void (*free)(void *state, void *alloc, size_t old);
 
@@ -24,6 +30,10 @@ typedef struct {
     AllyImpl *impl;
     void *state;
 } Ally;
+
+#define yalloc(a, size) a.impl->alloc(a.state, size)
+#define yrealloc(a, alloc, old, size) a.impl->realloc(a, alloc, old, size)
+#define yfree(a, alloc, old) a.impl->free(a.state, alloc, old)
 
 Ally getLIBCAlloc();
 
@@ -38,10 +48,15 @@ Ally getStatAlloc(Ally parent, struct AllyStats *statisticDest);
 void outputStats(struct AllyStats *stats, FILE *dest);
 #endif
 
+typedef struct {
+    void *start;
+    size_t len;
+    void *next;
+} AllyFixedBasicState;
+
 // A simple memory allocator that allocates elements in a fixed-length array.
-// Does not have any memory-degragmentation features
-Ally createFixedBasicAlloc(void *data, size_t limit);
-void destroyFixedBasicAlloc(Ally ally);
+// Does not have any memory-defragmentation features
+Ally createFixedBasicAlloc(AllyFixedBasicState *state, void *data, size_t limit);
 
 #ifdef __cplusplus
 }
@@ -52,5 +67,6 @@ void destroyFixedBasicAlloc(Ally ally);
 #endif
 
 #include "kallok_pages.h"
+#include "kallok_virtual.h"
 
 #endif //KOLLEKTIONS_KALLOK_H
