@@ -69,6 +69,8 @@ struct CompileData target_kallok_files[] = {
     SP(CT_C, "alloc/pages.c"),
     SP(CT_C, "alloc/virtual.c"),
     SP(CT_C, "alloc/fixed_basic.c"),
+    SP(CT_C, "alloc/paged.c"),
+    SP(CT_C, "alloc/basic.c"),
 };
 
 #define TARGET_KALLOK_FILES_LEN (sizeof(target_kallok_files) / sizeof(target_kallok_files[0]))

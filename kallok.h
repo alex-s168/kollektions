@@ -58,6 +58,27 @@ typedef struct {
 // Does not have any memory-defragmentation features
 Ally createFixedBasicAlloc(AllyFixedBasicState *state, void *data, size_t limit);
 
+// Allocates full OS pages
+// useful for big lists
+Ally getPageAlloc();
+
+typedef struct {
+    struct AllyFixedBasicState parent;
+    Ally parentAlly;
+    Ally source;
+} AllyDynamicBasicState;
+
+// Based on \see createFixedBasicAlloc
+// __Arena allocator__
+Ally createBasicAlloc(AllyDynamicBasicState *state, Ally source);
+
+typedef AllyDynamicBasicState AllyStandardState;
+
+static Ally createStandardAlloc(AllyStandardState *state) {
+    Ally paged = getPageAlloc();
+    return createBasicAlloc(state, paged);
+}
+
 #ifdef __cplusplus
 }
 }
