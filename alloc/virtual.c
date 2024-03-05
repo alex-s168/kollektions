@@ -82,7 +82,7 @@ VirtAlloc virtualMap(int *err, const char *file) {
     alloc.data = mmap(NULL, alloc.size, PROT_READ|PROT_WRITE,
                       MAP_SHARED, alloc.fd, 0);
 
-    *error = (alloc.data == MAP_FAILED);
+    *err = (alloc.data == MAP_FAILED);
 
     return alloc;
 }

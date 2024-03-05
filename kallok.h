@@ -6,6 +6,7 @@
 #define KOLLEKTIONS_KALLOK_H
 
 #include <stddef.h>
+#include "attrib.h"
 
 #ifdef __cplusplus
 namespace kallok {
@@ -31,17 +32,19 @@ typedef struct {
     void *state;
 } Ally;
 
-#define yalloc(a, size) a.impl->alloc(a.state, size)
-#define yrealloc(a, alloc, old, size) a.impl->realloc(a, alloc, old, size)
-#define yfree(a, alloc, old) a.impl->free(a.state, alloc, old)
+#define yalloc(a, size)               a.impl->alloc(a.state, size)
+#define yrealloc(a, alloc, old, size) a.impl->realloc(a.state, alloc, old, size)
+#define yfree(a, alloc, old)          a.impl->free(a.state, alloc, old)
 
 Ally getLIBCAlloc();
 
 struct AllyStats {
-    Ally parent;
     size_t allocs;
     size_t frees;
     size_t reallocs;
+
+UNSAFE 
+    Ally parent;
 };
 Ally getStatAlloc(Ally parent, struct AllyStats *statisticDest);
 #ifdef _INC_STDIO
@@ -49,6 +52,7 @@ void outputStats(struct AllyStats *stats, FILE *dest);
 #endif
 
 typedef struct {
+INTERNAL
     void *start;
     size_t len;
     void *next;
@@ -63,7 +67,8 @@ Ally createFixedBasicAlloc(AllyFixedBasicState *state, void *data, size_t limit)
 Ally getPageAlloc();
 
 typedef struct {
-    struct AllyFixedBasicState parent;
+INTERNAL
+    AllyFixedBasicState parent;
     Ally parentAlly;
     Ally source;
 } AllyDynamicBasicState;

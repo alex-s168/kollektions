@@ -14,6 +14,10 @@
 
 #define LD_ARGS   ""
 
+#define VERBOSE   0
+
+/* ========================================================================= */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,6 +34,7 @@ enum CompileType {
     CT_NOC,
     CT_DEP,
     CT_DIR,
+    CT_RUN,
 };
 
 enum CompileResult {
@@ -49,14 +54,44 @@ enum CompileResult linkTask(struct CompileData *objs, size_t len, char *out);
 enum CompileResult link_exe(struct CompileData *objs, size_t len, char *out);
 enum CompileResult compile(struct CompileData *objs, size_t len);
 enum CompileResult verifyDependencies(struct CompileData *objs, size_t len);
+enum CompileResult allRun(struct CompileData *objs, size_t len);
 
 bool exists(char *file) {
     return access(file, F_OK) == 0;
 }
 
-#define SP(typeIn, file) { .type = typeIn, .srcFile = file, .outFile = "build/" #file ".o" }
+#define SP(typeIn, file) { .type = typeIn, .srcFile = file, .outFile = "build/" file ".o" }
 #define DEP(file) { .type = CT_DEP, .srcFile = "", .outFile = file }
 #define DIR(dir)  { .type = CT_DIR, .srcFile = "", .outFile = dir }
+#define RUN(exe)  { .type = CT_RUN, .srcFile = exe, .outFile = "" }
+
+#define START   enum CompileResult res
+#define DO(cmd) res = cmd; if (res != CR_OK) return res;
+#define END     return CR_OK;
+#define LEN(li) (sizeof(li) / sizeof(li[0]))
+#define LI(li)  li, LEN(li)
+
+enum CompileResult test_impl(char *outFile, size_t id, struct CompileData *data, size_t dataLen);
+
+#define test(indir, infile, id, type, ...) \
+    static struct CompileData d_##id[] = { \
+        DIR("build/"), \
+        DIR("build/" indir), \
+        SP(type, infile), \
+        RUN("build/" infile ".exe"), \
+        __VA_ARGS__, \
+    }; \
+    res = test_impl("build/" infile ".exe", id, LI(d_##id)); \
+    if (res != CR_OK) return res;
+
+#if VERBOSE
+int system_impl(const char *command) {
+    printf("$ %s\n", command);
+    return system(command);
+}
+
+#define system system_impl
+#endif
 
 /* ========================================================================= */
 
@@ -73,15 +108,11 @@ struct CompileData target_kallok_files[] = {
     SP(CT_C, "alloc/basic.c"),
 };
 
-#define TARGET_KALLOK_FILES_LEN (sizeof(target_kallok_files) / sizeof(target_kallok_files[0]))
-
 enum CompileResult target_kallok() {
-    enum CompileResult r1 = compile(target_kallok_files, TARGET_KALLOK_FILES_LEN);
-    if (r1 != CR_OK)
-        return CR_FAIL_2;
-
-    enum CompileResult r2 = linkTask(target_kallok_files, TARGET_KALLOK_FILES_LEN, "build/kallok.a");
-    return r2;
+    START;
+    DO(compile(LI(target_kallok_files)));
+    DO(linkTask(LI(target_kallok_files), "build/kallok.a"));
+    END;
 }
 
 /* ========================================================================= */
@@ -127,67 +158,30 @@ struct CompileData target_kollektions_files[] = {
     SP(CT_C, "linked_list/removeMultiple.c"),
 };
 
-#define TARGET_KOLLEKTIONS_FILES_LEN (sizeof(target_kollektions_files) / sizeof(target_kollektions_files[0]))
-
 enum CompileResult target_kollektions() {
-    enum CompileResult r1 = compile(target_kollektions_files, TARGET_KOLLEKTIONS_FILES_LEN);
-    if (r1 != CR_OK)
-        return CR_FAIL_2;
-
-    enum CompileResult r2 = linkTask(target_kollektions_files, TARGET_KOLLEKTIONS_FILES_LEN, "build/kollektions.a");
-    return r2;
+    START;
+    DO(compile(LI(target_kollektions_files)));
+    DO(linkTask(LI(target_kollektions_files), "build/kollektions.a"));
+    END;
 }
 
 /* ========================================================================= */
 
-struct CompileData target_test_cpp_files[] = {
-    DIR("build/"),
+enum CompileResult target_tests() {
+    START;
 
-    SP(CT_CXX, "test_cpp.cpp"),
+#define t(id, file) test("tests/", "tests/" file ".c", id, CT_C, \
+        DEP("build/kallok.a"), \
+        DEP("build/kollektions.a"))
+   
+    t(0, "t00_fixed_basic_alloc");
+    t(1, "t01_list");
+    t(3, "t03_paged_alloc");
+    t(2, "t02_basic_alloc");
 
-    DEP("build/kallok.a"),
-    DEP("build/kollektions.a"),
-};
+#undef t 
 
-#define TARGET_TEST_CPP_FILES_LEN (sizeof(target_test_cpp_files) / sizeof(target_test_cpp_files[0]))
-
-enum CompileResult target_test_cpp() {
-    enum CompileResult r3 = verifyDependencies(target_test_cpp_files, TARGET_TEST_CPP_FILES_LEN);
-    if (r3 != CR_OK)
-        return CR_FAIL;
-
-    enum CompileResult r1 = compile(target_test_cpp_files, TARGET_TEST_CPP_FILES_LEN);
-    if (r1 != CR_OK)
-        return CR_FAIL_2;
-
-    enum CompileResult r2 = link_exe(target_test_cpp_files, TARGET_TEST_CPP_FILES_LEN, "build/test_cpp.exe");
-    return r2;
-}
-
-/* ========================================================================= */
-
-struct CompileData target_test_list_files[] = {
-    DIR("build/"),
-
-    SP(CT_C, "test_list.c"),
-
-    DEP("build/kallok.a"),
-    DEP("build/kollektions.a"),
-};
-
-#define TARGET_TEST_LIST_FILES_LEN (sizeof(target_test_list_files) / sizeof(target_test_list_files[0]))
-
-enum CompileResult target_test_list() {
-    enum CompileResult r3 = verifyDependencies(target_test_list_files, TARGET_TEST_LIST_FILES_LEN);
-    if (r3 != CR_OK)
-        return CR_FAIL;
-
-    enum CompileResult r1 = compile(target_test_list_files, TARGET_TEST_LIST_FILES_LEN);
-    if (r1 != CR_OK)
-        return CR_FAIL_2;
-
-    enum CompileResult r2 = link_exe(target_test_list_files, TARGET_TEST_LIST_FILES_LEN, "build/test_list.exe");
-    return r2;
+    END;
 }
 
 /* ========================================================================= */
@@ -198,13 +192,14 @@ struct Target {
 };
 
 struct Target targets[] = {
-	{ .name = "kallok.a", .run = target_kallok },
-	{ .name = "kollektions.a", .run = target_kollektions },
-	{ .name = "test_cpp.exe", .run = target_test_cpp },
-	{ .name = "test_list.exe", .run = target_test_list },
+	{ .name = "kallok.a",       .run = target_kallok },
+	{ .name = "kollektions.a",  .run = target_kollektions },
+	{ .name = "tests",          .run = target_tests },
 };
 
 #define TARGETS_LEN (sizeof(targets) / sizeof(targets[0]))
+
+/* ========================================================================= */
 
 int main(int argc, char **argv) {
     if (argc != 2)
@@ -307,7 +302,11 @@ enum CompileResult link_exe(struct CompileData *objs, size_t len, char *out) {
     sprintf(cmd, "%s -o %s " LD_ARGS " ", CC, out);
 
     for (size_t i = 0; i < len; i ++) {
-        strcat(cmd, objs[i].outFile);
+        struct CompileData cd = objs[i];
+        if (cd.type == CT_DIR)
+            continue;
+
+        strcat(cmd, cd.outFile);
         strcat(cmd, " ");
     }
 
@@ -373,3 +372,59 @@ enum CompileResult verifyDependencies(struct CompileData *objs, size_t len) {
         return CR_FAIL;
     return CR_OK;
 }
+
+enum CompileResult allRun(struct CompileData *objs, size_t len) {
+    for (size_t i = 0; i < len; i ++) {
+        struct CompileData *data = &objs[i];
+        if (data->type != CT_RUN)
+            continue;
+
+        char *f = data->srcFile;
+        if (!exists(f)) {
+            error("Missing executeable:\n");
+            error(f);
+            error("\n");
+            return CR_FAIL_2;
+        }
+
+        int res = system(f);
+        if (res != 0)
+            return CR_FAIL;
+    }
+    return CR_OK;
+}
+
+enum CompileResult test_impl(char *outFile, size_t id, struct CompileData *data, size_t dataLen) {
+    {
+       enum CompileResult r = verifyDependencies(data, dataLen);
+       if (r != CR_OK)
+           goto fail;
+    }
+
+    {
+        enum CompileResult r = compile(data, dataLen);
+        if (r != CR_OK)
+            goto fail;
+    }
+
+    {
+        enum CompileResult r = link_exe(data, dataLen, outFile);
+        if (r != CR_OK)
+            goto fail;
+    }
+
+    {
+        enum CompileResult r = allRun(data, dataLen);
+        if (r != CR_OK)
+            goto fail;
+    }
+
+    printf("Test %zu: OK\n", id);
+    return CR_OK;
+
+fail:
+    printf("Test %zu: FAIL\n", id);
+    return CR_FAIL;
+}
+
+

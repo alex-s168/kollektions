@@ -8,4 +8,6 @@
 #define INTERNAL /* internal: */
 #define UNSAFE   /* unsafe: */
 
+#define EXPERIMENTAL_FN(name) experimental_ ## name
+
 #endif //KOLLEKTIONS_ATTRIB_H
