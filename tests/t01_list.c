@@ -2,22 +2,25 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#include "../static_list.h"
+#include "../dynamic_list.h"
 
 #include <assert.h>
 
 int main() {
-    int list_data[10];
-    struct StaticList list;
-    StaticList_init(&list, sizeof(int), list_data, 10);
+    static char alloc[sizeof(int) * 10];
+    AllySingleFixedState allyState;
+    Ally ally = createSingleFixedAlloc(&allyState, alloc, sizeof(alloc));
 
-    StaticList_add(&list, &(int) { 1 });
-    StaticList_add(&list, &(int) { 2 });
-    StaticList_add(&list, &(int) { 3 });
-    StaticList_add(&list, &(int) { 4 });
-    StaticList_add(&list, &(int) { 5 });
+    struct DynamicList list;
+    DynamicList_init(&list, sizeof(int), ally, 0);
 
-    StaticList_removeRange(&list, 1, 2);
+    DynamicList_add(&list, &(int) { 1 });
+    DynamicList_add(&list, &(int) { 2 });
+    DynamicList_add(&list, &(int) { 3 });
+    DynamicList_add(&list, &(int) { 4 });
+    DynamicList_add(&list, &(int) { 5 });
+
+    DynamicList_removeRange(&list, 1, 2);
 
     assert(list.fixed.len == 3);
 

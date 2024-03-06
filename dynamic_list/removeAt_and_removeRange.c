@@ -1,7 +1,3 @@
-//
-// Created by Alexander Nutz on 17/02/2024.
-//
-
 #include "impl_utils.h"
 
 /**
@@ -9,7 +5,14 @@
  * @param pos At which index to remove.
  */
 void DynamicList_removeAt(struct DynamicList *list, size_t pos) {
-    StaticList_removeAt(DynamicList_as_StaticList(list), pos);
+    if (pos != list->fixed.len - 1) {
+        // not last element
+        void *dest = FixedList_get(list->fixed, pos);
+        void *src = FixedList_get(list->fixed, pos + 1);
+        size_t amount = list->fixed.len - (pos + 1);
+        memcpy(dest, src, amount * list->fixed.stride);
+    }
+    list->fixed.len --;
     DynamicList_internal_postRemove(list);
 }
 
@@ -20,6 +23,14 @@ void DynamicList_removeAt(struct DynamicList *list, size_t pos) {
  */
 void DynamicList_removeRange(struct DynamicList *list,
                              size_t first, size_t last) {
-    StaticList_removeRange(DynamicList_as_StaticList(list), first, last);
+    size_t amToRem = last - first + 1;
+    if (last != list->fixed.len - 1) {
+        // not last element
+        void *dest = FixedList_get(list->fixed, first);
+        void *src = FixedList_get(list->fixed, last + 1);
+        size_t amount = list->fixed.len - (first + amToRem);
+        memcpy(dest, src, amount * list->fixed.stride);
+    }
+    list->fixed.len -= amToRem;
     DynamicList_internal_postRemove(list);
 }

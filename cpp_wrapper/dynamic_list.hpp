@@ -8,7 +8,6 @@
 #include "c.hpp"
 #include "exception.hpp"
 #include "fixed_list.hpp"
-#include "static_list.hpp"
 #include "../kallok_cpp.hpp"
 
 namespace kollektions {

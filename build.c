@@ -7,6 +7,22 @@
 
 /* ========================================================================= */
 
+struct CompileData target_kash_files[] = {
+        DIR("build/"),
+
+        DIR("build/kash/"),
+        SP(CT_C, "kash/fnv1a.c"),
+};
+
+enum CompileResult target_kash() {
+    START;
+    DO(compile(LI(target_kash_files)));
+    DO(linkTask(LI(target_kash_files), "build/kash.a"));
+    END;
+}
+
+/* ========================================================================= */
+
 struct CompileData target_kallok_files[] = {
     DIR("build/"),
 
@@ -46,12 +62,6 @@ struct CompileData target_kollektions_files[] = {
 
     DIR("build/lists/"),
     SP(CT_C, "lists/copy.c"),
-
-    DIR("build/static_list/"),
-    SP(CT_C, "static_list/add_and_addAll.c"),
-    SP(CT_C, "static_list/init_and_clear.c"),
-    SP(CT_C, "static_list/insertAt_and_insertAllAt.c"),
-    SP(CT_C, "static_list/removeAt_and_removeRange.c"),
 
     DIR("build/blocking_list/"),
     SP(CT_C, "blocking_list/access.c"),
@@ -102,6 +112,7 @@ enum CompileResult target_tests() {
 struct Target targets[] = {
 	{ .name = "kallok.a",       .run = target_kallok },
 	{ .name = "kollektions.a",  .run = target_kollektions },
+    { .name = "kash.a",         .run = target_kash },
 	{ .name = "tests",          .run = target_tests },
 };
 

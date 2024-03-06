@@ -9,16 +9,22 @@
  * @param stride The size of each element
  * @param cap The initial maximum amount of elements
  * @param data The array of data. needs to be at least @arg cap * @arg stride
- * @return The index of the element. -1 if not found.
+ * @return 0 if ok
  */
-void DynamicList_init(struct DynamicList *list, size_t stride,
+int DynamicList_init(struct DynamicList *list, size_t stride,
                       Ally ally, size_t initCap) {
     void *alloc = NULL;
     if (initCap > 0) {
         alloc = ally.impl->alloc(ally.state, initCap * stride);
+        if (alloc == NULL)
+            return 1;
     }
-    StaticList_init(DynamicList_as_StaticList(list), stride, alloc, initCap);
+    list->fixed.stride = stride;
+    list->fixed.data = alloc;
+    list->cap = initCap;
+    list->fixed.len = 0;
     list->ally = ally;
+    return 0;
 }
 
 /**

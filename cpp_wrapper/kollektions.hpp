@@ -15,7 +15,6 @@
 #include "c.hpp"
 #include "exception.hpp"
 #include "copy.hpp"
-#include "static_list.hpp"
 #include "dynamic_list.hpp"
 #include "fixed_list.hpp"
 

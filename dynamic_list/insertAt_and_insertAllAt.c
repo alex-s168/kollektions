@@ -8,19 +8,24 @@
  * @param list Self
  * @param list At what position to insert the element
  * @param data The element to add
+ * @return 0 if ok
  */
-void DynamicList_insertAt(struct DynamicList *list, size_t index, void *data) {
-    DynamicList_reserve(list, 1);
-    StaticList_insertAt(DynamicList_as_StaticList(list), index, data);
-}
-
-/**
- * @param list Self
- * @param list At what position to insert the element
- * @param data The element to add
- */
-void DynamicList_insertAllAt(struct DynamicList *list, size_t index,
+int DynamicList_insertAllAt(struct DynamicList *list, size_t index,
                              void *data, size_t len) {
-    DynamicList_reserve(list, len);
-    StaticList_insertAllAt(DynamicList_as_StaticList(list), index, data, len);
+    if (DynamicList_reserve(list, len))
+        return 1;
+    void *elem = FixedList_get(list->fixed, index);
+    {
+        void *src = elem;
+        void *dst = FixedList_get(list->fixed, index + len);
+        size_t am = list->fixed.len - index - len;
+        memcpy(dst, src, am * list->fixed.stride);
+    }
+    {
+        void *src = data;
+        void *dst = elem;
+        size_t am = len;
+        memcpy(dst, src, am * list->fixed.stride);
+    }
+    return 0;
 }

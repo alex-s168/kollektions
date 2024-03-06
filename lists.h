@@ -1,7 +1,3 @@
-//
-// Created by Alexander Nutz on 17/02/2024.
-//
-
 #ifndef KOLLEKTIONS_LISTS_H
 #define KOLLEKTIONS_LISTS_H
 
@@ -12,7 +8,6 @@ extern "C" {
 #include "kallok.h"
 #include "fixed_list.h"
 #include "dynamic_list.h"
-#include "static_list.h"
 #include "linked_list.h"
 
 /**

@@ -9,7 +9,6 @@
 #include "exception.hpp"
 #include "../kallok.h"
 #include "fixed_list.hpp"
-#include "static_list.hpp"
 #include "dynamic_list.hpp"
 
 namespace kollektions {

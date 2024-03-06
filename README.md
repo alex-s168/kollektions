@@ -3,20 +3,20 @@ Collection and memory allocator framework written in C.
 Tested on Linux and Windows.
 
 ## Features (Kollektions)
-- Fixed List
-  fixed-length modifieable list. Is the base for most other collections.
-- Static List
-  fixed-capacity modifieable list. Based on Fixed List.
-- Dynamic List
-  dynamically-allocated modifieable list. Based on Static List.
+- Fixed List:
+  fixed-length mutable list. Is the base for most other collections.
+- Dynamic List:
+  dynamically-allocated mutable list.
+- Doubly Linked List:
+  dynamically-allocated mutable list with O(1) remove, add and insert
 
 ## Features (Kallok)
 - Common interface for all allocators. `Ally` type.
 - Page allocator
-- LibC allocator 
-- Basic fixed & dynamic allocators 
+- LibC allocator
+- Basic fixed & dynamic allocators:
   big allocation split into chunks. one allocation consists of multiple chunks.
-- Disk-based allocator 
+- Disk-based allocator:
   virtual maps a file into memory.
 
 ## Building

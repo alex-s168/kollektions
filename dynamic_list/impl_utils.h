@@ -1,7 +1,3 @@
-//
-// Created by Alexander Nutz on 17/02/2024.
-//
-
 #ifndef KOLLEKTIONS_IMPL_UTILS_H
 #define KOLLEKTIONS_IMPL_UTILS_H
 
@@ -10,9 +6,8 @@ extern "C" {
 #endif
 
 #include "../dynamic_list.h"
-#include "../static_list.h"
 
-static inline void DynamicList_internal_postRemove(struct DynamicList *list) {
+static void DynamicList_internal_postRemove(struct DynamicList *list) {
     if (list->cap - list->fixed.len > 4) {
         DynamicList_shrink(list);
     }
