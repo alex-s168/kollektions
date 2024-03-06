@@ -10,9 +10,9 @@ extern "C" {
 #endif
 
 #include <stddef.h>
-#include <pthread.h>
 #include <stdbool.h>
 
+#include "mutex.h"
 #include "kallok.h"
 #include "dynamic_list.h"
 #include "kallok.h"
@@ -23,9 +23,9 @@ UNSAFE
     struct DynamicList dyn;
 
 INTERNAL
-    pthread_rwlock_t rwlock;
+    rwlock_t rwlock;
     bool useMutex;
-    pthread_mutex_t mutex;
+    mutex_t mutex;
 };
 
 /**

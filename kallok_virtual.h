@@ -2,8 +2,8 @@
 // Created by Alexander Nutz on 04/03/2024.
 //
 
-#ifndef KOLLEKTIONS_KALLOK_VIRTUAL_H
-#define KOLLEKTIONS_KALLOK_VIRTUAL_H
+#ifndef KALLOK_VIRTUAL_H
+#define KALLOK_VIRTUAL_H
 
 #include <stddef.h>
 
@@ -12,9 +12,10 @@ namespace kallok {
  extern "C" {
 #endif
 
-
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
+#ifndef WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #endif
 
@@ -47,4 +48,4 @@ void virtualUnmap(VirtAlloc alloc);
 #endif
 
 
-#endif //KOLLEKTIONS_KALLOK_VIRTUAL_H
+#endif //KALLOK_VIRTUAL_H

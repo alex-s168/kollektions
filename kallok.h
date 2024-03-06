@@ -2,8 +2,8 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#ifndef KOLLEKTIONS_KALLOK_H
-#define KOLLEKTIONS_KALLOK_H
+#ifndef KALLOK_H
+#define KALLOK_H
 
 #include <stddef.h>
 #include "attrib.h"
@@ -95,4 +95,4 @@ static Ally createStandardAlloc(AllyStandardState *state) {
 #include "kallok_pages.h"
 #include "kallok_virtual.h"
 
-#endif //KOLLEKTIONS_KALLOK_H
+#endif //KALLOK_H

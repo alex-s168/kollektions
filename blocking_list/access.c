@@ -3,36 +3,35 @@
 //
 
 #include "../blocking_list.h"
-#include <pthread.h>
 
 void BlockingList_startReadAccess(struct BlockingList *list) {
     if (list->useMutex) {
-        pthread_mutex_lock(&list->mutex);
+        mutex_lock(&list->mutex);
     } else {
-        pthread_rwlock_rdlock(&list->rwlock);
+        rwlock_r_lock(&list->rwlock);
     }
 }
 
 void BlockingList_stopReadAccess(struct BlockingList *list) {
     if (list->useMutex) {
-        pthread_mutex_unlock(&list->mutex);
+        mutex_unlock(&list->mutex);
     } else {
-        pthread_rwlock_unlock(&list->rwlock);
+        rwlock_unlock(&list->rwlock);
     }
 }
 
 void BlockingList_startWriteAccess(struct BlockingList *list) {
     if (list->useMutex) {
-        pthread_mutex_lock(&list->mutex);
+        mutex_lock(&list->mutex);
     } else {
-        pthread_rwlock_wrlock(&list->rwlock);
+        rwlock_w_lock(&list->rwlock);
     }
 }
 
 void BlockingList_stopWriteAccess(struct BlockingList *list) {
     if (list->useMutex) {
-        pthread_mutex_unlock(&list->mutex);
+        mutex_unlock(&list->mutex);
     } else {
-        pthread_rwlock_unlock(&list->rwlock);
+        rwlock_unlock(&list->rwlock);
     }
 }
