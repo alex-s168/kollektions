@@ -1,7 +1,6 @@
-#define CC        "clang"
+#define CC        "tcc"
 #define CC_ARGS   "-O2"
 
-#define CXX       "clang++"
 #define CXX_ARGS  "-O2"
 
 #include "build_c/build.h"

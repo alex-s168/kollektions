@@ -4,7 +4,7 @@
 
 #include "../kallok.h"
 
-#if defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
+#ifdef _WIN32
 VirtAlloc virtualMap(int *err, const char *file) {
     VirtAlloc alloc;
 

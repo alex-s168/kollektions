@@ -13,7 +13,7 @@ namespace kallok {
 #endif
 
 
-#if defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -22,7 +22,7 @@ typedef struct {
     void  *data;
     size_t size;
 
-#if defined(WIN32) || defined(__WIN32) || defined(__WIN32__)
+#ifdef _WIN32
     HANDLE hFile;
     HANDLE hMap;
 #else
