@@ -29,4 +29,6 @@ int main() {
     assertElem(0, 1);
     assertElem(1, 4);
     assertElem(2, 5);
+
+    return 0;
 }

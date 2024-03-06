@@ -26,4 +26,6 @@ int main() {
     yfree(ally, a, 32);
     yfree(ally, b, 64);
     yfree(ally, c, 32);
+
+    return 0;
 }

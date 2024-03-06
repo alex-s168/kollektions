@@ -81,7 +81,7 @@ enum CompileResult target_kollektions() {
 /* ========================================================================= */
 
 enum CompileResult target_tests() {
-    START;
+    START_TESTING;
 
 #define t(id, file) test("tests/", "tests/" file ".c", id, CT_C, \
         DEP("build/kallok.a"), \
@@ -94,7 +94,7 @@ enum CompileResult target_tests() {
 
 #undef t 
 
-    END;
+    END_TESTING;
 }
 
 /* ========================================================================= */
