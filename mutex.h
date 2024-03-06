@@ -71,7 +71,7 @@ static void mutex_destroy(mutex_t *mutex) {
 typedef pthread_rwlock_t rwlock_t;
 
 static void rwlock_create(rwlock_t *rwlock) {
-    pthread_rwlock_init(rwlock);
+    pthread_rwlock_init(rwlock, NULL);
 }
 
 static void rwlock_r_lock(rwlock_t *rwlock) {

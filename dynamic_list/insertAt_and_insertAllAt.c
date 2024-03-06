@@ -3,6 +3,7 @@
 //
 
 #include "impl_utils.h"
+#include <string.h>
 
 /**
  * @param list Self

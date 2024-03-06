@@ -24,11 +24,6 @@ __attribute((hot))
 void hash_fnv1a_64_hash(void *dest, void *value, size_t valueSize)
     FNV1A(uint64_t, 0x100000001B3, 0xcbf29ce484222325, dest, value, valueSize)
 
-#pragma GCC optimize
-__attribute((hot))
-void hash_fnv1a_128_hash(void *dest, void *value, size_t valueSize)
-    FNV1A(__uint128_t, 0x1000000000000000000013B, 0x6c62272e07bb014262b821756295c58d, dest, value, valueSize)
-
 HashAlgo hash_fnv1a_32() {
     return (HashAlgo) { .fn = hash_fnv1a_32_hash, .hashSize = 4 };
 }
@@ -37,6 +32,3 @@ HashAlgo hash_fnv1a_64() {
     return (HashAlgo) { .fn = hash_fnv1a_64_hash, .hashSize = 8 };
 }
 
-HashAlgo hash_fnv1a_128() {
-    return (HashAlgo) { .fn = hash_fnv1a_128_hash, .hashSize = 16 };
-}

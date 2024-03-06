@@ -7,6 +7,13 @@
 
 /* ========================================================================= */
 
+enum CompileResult target_clean() {
+    rmdir("build/");
+    return CR_OK;
+}
+
+/* ========================================================================= */
+
 struct CompileData target_kash_files[] = {
         DIR("build/"),
 
@@ -114,6 +121,7 @@ struct Target targets[] = {
 	{ .name = "kollektions.a",  .run = target_kollektions },
     { .name = "kash.a",         .run = target_kash },
 	{ .name = "tests",          .run = target_tests },
+    { .name = "clean",          .run = target_clean },
 };
 
 #define TARGETS_LEN (sizeof(targets) / sizeof(targets[0]))
