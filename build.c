@@ -18,6 +18,7 @@ struct CompileData target_kallok_files[] = {
     SP(CT_C, "alloc/fixed_basic.c"),
     SP(CT_C, "alloc/paged.c"),
     SP(CT_C, "alloc/basic.c"),
+    SP(CT_C, "alloc/single_fixed.c"),
 };
 
 enum CompileResult target_kallok() {

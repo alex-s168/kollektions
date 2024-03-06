@@ -37,6 +37,7 @@ static void *paged_realloc(void *state, void *alloc, size_t old, size_t new) {
 static AllyImpl impl = {
     .free = paged_free,
     .alloc = paged_alloc,
+    .realloc = paged_realloc,
 };
 
 Ally getPageAlloc() {

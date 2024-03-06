@@ -6,6 +6,7 @@
 #define KALLOK_H
 
 #include <stddef.h>
+#include <stdbool.h>
 #include "attrib.h"
 
 #ifdef __cplusplus
@@ -50,6 +51,17 @@ Ally getStatAlloc(Ally parent, struct AllyStats *statisticDest);
 #ifdef _INC_STDIO
 void outputStats(struct AllyStats *stats, FILE *dest);
 #endif
+
+typedef struct {
+INTERNAL
+    bool used;
+    void *start;
+    size_t len;
+} AllySingleFixedState;
+
+// A simple memory allocator that only allows for one allocation at a time.
+// Uses the given fixed array as memry source.
+Ally createSingleFixedAlloc(AllySingleFixedState *state, void *data, size_t len);
 
 typedef struct {
 INTERNAL
