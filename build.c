@@ -1,7 +1,12 @@
-#define CC        "tcc"
-#define CC_ARGS   "-O2"
-
-#define CXX_ARGS  "-O2"
+#ifndef CC
+# define CC        "tcc"
+#endif
+#ifndef CC_ARGS
+# define CC_ARGS   "-O2"
+#endif
+#ifndef CXX_ARGS
+# define CXX_ARGS  "-O2"
+#endif
 
 #include "build_c/build.h"
 
