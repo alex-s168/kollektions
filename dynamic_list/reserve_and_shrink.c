@@ -51,7 +51,7 @@ int DynamicList_reserveExact(struct DynamicList *list, size_t additional) {
  */
 int DynamicList_shrink(struct DynamicList *list) {
     if (list->cap == list->fixed.len)
-        return;
+        return 0;
 
     list->fixed.data = list->ally.impl->realloc(list->ally.state,
                                                 list->fixed.data,
