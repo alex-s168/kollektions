@@ -130,11 +130,11 @@ enum CompileResult target_tests() {
 #define t(id, file) test("tests/", "tests/" file ".c", id, CT_C, \
         DEP("build/kallok.a"), \
         DEP("build/kollektions.a"))
-   
+
     t(0, "t00_fixed_basic_alloc");
     t(1, "t01_list");
-    t(3, "t03_paged_alloc");
     t(2, "t02_basic_alloc");
+    t(3, "t03_paged_alloc");
 
 #undef t 
 
