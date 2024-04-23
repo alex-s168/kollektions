@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 04/03/2024.
 //
 
-#include "../kallok.h"
+#include "kallok.h"
 
 #include <string.h>
 #include <stdint.h>

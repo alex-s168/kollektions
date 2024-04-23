@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 04/03/2024.
 //
 
-#include "../kallok.h"
+#include "kallok.h"
 
 #ifdef _WIN32
 VirtAlloc virtualMap(int *err, const char *file) {

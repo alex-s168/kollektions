@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#include "../dynamic_list.h"
+#include "../dynamic_list/dynamic_list.h"
 
 #include <assert.h>
 

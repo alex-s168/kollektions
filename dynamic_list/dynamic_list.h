@@ -7,9 +7,9 @@ extern "C" {
 
 #include <stddef.h>
 
-#include "fixed_list.h"
-#include "kallok.h"
-#include "attrib.h"
+#include "../fixed_list/fixed_list.h"
+#include "../kallok/kallok.h"
+#include "../attrib.h"
 
 struct DynamicList {
     struct FixedList fixed;

@@ -12,11 +12,10 @@ extern "C" {
 #include <stddef.h>
 #include <stdbool.h>
 
-#include "mutex.h"
-#include "kallok.h"
-#include "dynamic_list.h"
-#include "kallok.h"
-#include "attrib.h"
+#include "../mutex.h"
+#include "../kallok/kallok.h"
+#include "../dynamic_list/dynamic_list.h"
+#include "../attrib.h"
 
 struct BlockingList {
 UNSAFE

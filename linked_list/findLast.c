@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 21/02/2024.
 //
 
-#include "../linked_list.h"
+#include "linked_list.h"
 
 #include <string.h>
 

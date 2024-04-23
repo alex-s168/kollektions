@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 19/02/2024.
 //
 
-#include "../blocking_list.h"
+#include "blocking_list.h"
 
 void BlockingList_startReadAccess(struct BlockingList *list) {
     if (list->useMutex) {

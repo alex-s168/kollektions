@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "../kallok.h"
+#include "../kallok/kallok.h"
 
 int main() {
     static char data[512];

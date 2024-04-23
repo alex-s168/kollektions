@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 21/02/2024.
 //
 
-#include "../linked_list.h"
+#include "linked_list.h"
 
 void DoubleLinkedList_remove(struct DoubleLinkedList *list, struct DoubleLinkedElement *element) {
     if (element->prev == NULL) {

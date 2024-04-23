@@ -5,10 +5,10 @@
 extern "C" {
 #endif
 
-#include "kallok.h"
-#include "fixed_list.h"
-#include "dynamic_list.h"
-#include "linked_list.h"
+#include "../kallok/kallok.h"
+#include "../fixed_list/fixed_list.h"
+#include "../dynamic_list/dynamic_list.h"
+#include "../linked_list/linked_list.h"
 
 /**
  * @param list Self

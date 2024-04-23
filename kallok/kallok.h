@@ -7,7 +7,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include "attrib.h"
+#include "../attrib.h"
 
 #ifdef __cplusplus
 namespace kallok {
@@ -104,7 +104,7 @@ static Ally createStandardAlloc(AllyStandardState *state) {
 #define KALLOK_PREFIX /* */
 #endif
 
-#include "kallok_pages.h"
-#include "kallok_virtual.h"
+#include "pages.h"
+#include "virtual.h"
 
 #endif //KALLOK_H

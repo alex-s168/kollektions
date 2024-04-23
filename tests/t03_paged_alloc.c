@@ -4,7 +4,7 @@
 
 #include <assert.h>
 
-#include "../kallok.h"
+#include "../kallok/kallok.h"
 
 int main() {
     Ally ally = getPageAlloc();

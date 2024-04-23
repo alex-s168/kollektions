@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#include "../lists.h"
+#include "lists.h"
 
 #include <string.h>
 

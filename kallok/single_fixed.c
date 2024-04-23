@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 06/03/2024.
 //
 
-#include "../kallok.h"
+#include "kallok.h"
 
 static void alloc_free(void *stateIn, void *alloc, size_t old) {
     (void) alloc;

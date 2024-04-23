@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 17/02/2024.
 //
 
-#include "../fixed_list.h"
+#include "fixed_list.h"
 
 #include <string.h>
 

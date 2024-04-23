@@ -1,4 +1,4 @@
-#include "../kash.h"
+#include "kash.h"
 #include <stdint.h>
 
 // non-cryptographic hash function

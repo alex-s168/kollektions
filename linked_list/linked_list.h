@@ -11,9 +11,9 @@ extern "C" {
 
 #include <stddef.h>
 
-#include "dynamic_list.h"
-#include "kallok.h"
-#include "attrib.h"
+#include "../dynamic_list/dynamic_list.h"
+#include "../kallok/kallok.h"
+#include "../attrib.h"
 
 struct DoubleLinkedElement {
     struct DoubleLinkedElement *next;

@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "../kallok.h"
+#include "kallok.h"
 
 static void paged_free(void *state, void *alloc, size_t old) {
     (void) state;

@@ -43,21 +43,21 @@ enum CompileResult target_kash() {
 struct CompileData target_kallok_files[] = {
     DIR("build/"),
 
-    DIR("build/alloc/"),
-    SP(CT_C, "alloc/libc.c"),
-    SP(CT_C, "alloc/statistic.c"),
-    SP(CT_C, "alloc/pages.c"),
-    SP(CT_C, "alloc/virtual.c"),
-    SP(CT_C, "alloc/fixed_basic.c"),
-    SP(CT_C, "alloc/paged.c"),
-    SP(CT_C, "alloc/basic.c"),
-    SP(CT_C, "alloc/single_fixed.c"),
+    DIR("build/kallok/"),
+    SP(CT_C, "kallok/libc.c"),
+    SP(CT_C, "kallok/statistic.c"),
+    SP(CT_C, "kallok/pages.c"),
+    SP(CT_C, "kallok/virtual.c"),
+    SP(CT_C, "kallok/fixed_basic.c"),
+    SP(CT_C, "kallok/paged.c"),
+    SP(CT_C, "kallok/basic.c"),
+    SP(CT_C, "kallok/single_fixed.c"),
 };
 
 enum CompileResult target_kallok() {
     ONLY_IF({
         NOT_FILE("build/kallok.a");
-        CHANGED("alloc/");
+        CHANGED("kallok/");
     });
 
     START;

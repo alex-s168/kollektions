@@ -2,7 +2,7 @@
 // Created by Alexander Nutz on 29/02/2024.
 //
 
-#include "../kallok.h"
+#include "kallok.h"
 
 struct State {
     struct AllyStats stats;

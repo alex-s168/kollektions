@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "../dynamic_list.h"
+#include "dynamic_list.h"
 
 static void DynamicList_internal_postRemove(struct DynamicList *list) {
     if (list->cap - list->fixed.len > 4) {
