@@ -27,9 +27,14 @@ struct CompileData target_kash_files[] = {
 };
 
 enum CompileResult target_kash() {
+    ONLY_IF({
+        NOT_FILE("build/kash.a");
+        CHANGED("kash/");
+    });
+
     START;
-    DO(compile(LI(target_kash_files)));
-    DO(linkTask(LI(target_kash_files), "build/kash.a"));
+        DO(compile(LI(target_kash_files)));
+        DO(linkTask(LI(target_kash_files), "build/kash.a"));
     END;
 }
 
@@ -50,9 +55,14 @@ struct CompileData target_kallok_files[] = {
 };
 
 enum CompileResult target_kallok() {
+    ONLY_IF({
+        NOT_FILE("build/kallok.a");
+        CHANGED("alloc/");
+    });
+
     START;
-    DO(compile(LI(target_kallok_files)));
-    DO(linkTask(LI(target_kallok_files), "build/kallok.a"));
+        DO(compile(LI(target_kallok_files)));
+        DO(linkTask(LI(target_kallok_files), "build/kallok.a"));
     END;
 }
 
@@ -94,9 +104,21 @@ struct CompileData target_kollektions_files[] = {
 };
 
 enum CompileResult target_kollektions() {
+    ONLY_IF({
+        NOT_FILE("build/kollektions.a");
+        CHANGED("linked_list/");
+        CHANGED("blocking_list/");
+        CHANGED("lists/");
+        CHANGED("dynamic_list/");
+        CHANGED("fixed_list/");
+
+        CHANGED("attrib.h");
+        CHANGED("mutex.h");
+    });
+
     START;
-    DO(compile(LI(target_kollektions_files)));
-    DO(linkTask(LI(target_kollektions_files), "build/kollektions.a"));
+        DO(compile(LI(target_kollektions_files)));
+        DO(linkTask(LI(target_kollektions_files), "build/kollektions.a"));
     END;
 }
 
