@@ -10,4 +10,6 @@
 
 #define EXPERIMENTAL_FN(name) experimental_ ## name
 
+#define TYPES(...) /* */
+
 #endif //KOLLEKTIONS_ATTRIB_H
