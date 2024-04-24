@@ -7,6 +7,7 @@ extern "C" {
 
 #include <stddef.h>
 
+#include "../lists/AnyList.h"
 #include "../fixed_list/fixed_list.h"
 #include "../kallok/kallok.h"
 #include "../attrib.h"
@@ -18,6 +19,9 @@ struct DynamicList {
 INTERNAL
     KALLOK_PREFIX Ally ally;
 };
+
+// THE RETURNED LIST STILL DEPENDS ON THE LIST INPUT!!!
+MutAnyList DynamicList_asAny(struct DynamicList *list);
 
 /**
  * @param list Self
