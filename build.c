@@ -101,6 +101,7 @@ struct CompileData target_kollektions_files[] = {
     SP(CT_C, "linked_list/linkAt.c"),
     SP(CT_C, "linked_list/remove.c"),
     SP(CT_C, "linked_list/removeMultiple.c"),
+    SP(CT_C, "linked_list/insert.c"),
 };
 
 enum CompileResult target_kollektions() {

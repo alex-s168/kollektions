@@ -4,28 +4,12 @@
 
 #include "linked_list.h"
 
-#include <string.h>
-
-static struct DoubleLinkedElement *allocElem(struct DoubleLinkedList *list) {
-    return list->ally.impl->alloc(list->ally.state,
-                                  sizeof(struct DoubleLinkedElement) + list->stride);
-}
-
 /**
  * @param list Self
  * @param data The pointer to the element
  */
 void DoubleLinkedList_add(struct DoubleLinkedList *list, void *data) {
-    struct DoubleLinkedElement *elem = allocElem(list);
-    memcpy(DoubleLinkedElement_data(elem), data, list->stride);
-    elem->next = NULL;
-    elem->prev = list->end;
-    if (list->end != NULL)
-        list->end->next = elem;
-    list->end = elem;
-    if (list->start == NULL)
-        list->start = elem;
-    list->size += 1;
+    DoubleLinkedList_insertAfter(list, list->end, data);
 }
 
 /**
@@ -33,15 +17,5 @@ void DoubleLinkedList_add(struct DoubleLinkedList *list, void *data) {
  * @param data The pointer to the element
  */
 void DoubleLinkedList_addFront(struct DoubleLinkedList *list, void *data) {
-    struct DoubleLinkedElement *elem = allocElem(list);
-    memcpy(DoubleLinkedElement_data(elem), data, list->stride);
-    elem->prev = NULL;
-    elem->next = list->start;
-    if (list->start != NULL)
-        list->start->prev = elem;
-    list->start = elem;
-    if (list->end == NULL) {
-        list->end = elem;
-    }
-    list->size += 1;
+    DoubleLinkedList_insertAfter(list, NULL, data);
 }

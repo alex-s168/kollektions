@@ -129,6 +129,13 @@ void DoubleLinkedList_remove(struct DoubleLinkedList *list, struct DoubleLinkedE
 void DoubleLinkedList_removeMultiple(struct DoubleLinkedList *list, struct DoubleLinkedElement *first, struct DoubleLinkedElement *last, size_t removed);
 
 /**
+ * @param list self
+ * @param after (optional): after which node to insert
+ * @param data The pointer to the element
+ */
+void DoubleLinkedList_insertAfter(struct DoubleLinkedList *list, struct DoubleLinkedElement *after, void *data);
+
+/**
  * @param list Self
  * @param data The pointer to the element
  */
