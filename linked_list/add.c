@@ -23,6 +23,8 @@ void DoubleLinkedList_add(struct DoubleLinkedList *list, void *data) {
     if (list->end != NULL)
         list->end->next = elem;
     list->end = elem;
+    if (list->start == NULL)
+        list->start = elem;
     list->size += 1;
 }
 
@@ -38,5 +40,8 @@ void DoubleLinkedList_addFront(struct DoubleLinkedList *list, void *data) {
     if (list->start != NULL)
         list->start->prev = elem;
     list->start = elem;
+    if (list->end == NULL) {
+        list->end = elem;
+    }
     list->size += 1;
 }

@@ -135,6 +135,7 @@ enum CompileResult target_tests() {
     t(1, "t01_list");
     t(2, "t02_basic_alloc");
     t(3, "t03_paged_alloc");
+    t(4, "t04_linked_list");
 
 #undef t 
 
