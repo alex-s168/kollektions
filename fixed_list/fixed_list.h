@@ -5,10 +5,6 @@
 #ifndef KOLLEKTIONS_FIXED_LIST_H
 #define KOLLEKTIONS_FIXED_LIST_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 
 /**
@@ -51,9 +47,5 @@ static inline void *FixedList_get(struct FixedList list, size_t index) {
  * @param data The pointer to the element
  */
 void FixedList_set(struct FixedList list, size_t index, void *data);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif //KOLLEKTIONS_FIXED_LIST_H

@@ -7,11 +7,6 @@
 
 #include <stddef.h>
 
-#ifdef __cplusplus
-namespace kallok {
- extern "C" {
-#endif
-
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -34,18 +29,5 @@ typedef struct {
 VirtAlloc virtualMap(int *err, const char *path);
 
 void virtualUnmap(VirtAlloc alloc);
-
-#ifdef __cplusplus
-}
-}
-#ifndef KALLOK_PREFIX
-#define KALLOK_PREFIX kallok::
-#endif
-#else
-#ifndef KALLOK_PREFIX
-#define KALLOK_PREFIX /* */
-#endif
-#endif
-
 
 #endif //KALLOK_VIRTUAL_H

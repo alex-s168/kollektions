@@ -12,11 +12,6 @@
 
 #include <stddef.h>
 
-#ifdef __cplusplus
-namespace kallok {
- extern "C" {
-#endif
-
 struct Page {
     void   *ptr;
     size_t  size;
@@ -38,17 +33,5 @@ void make_exec(void *ptr, size_t size) ;
 void free_page(struct Page page);
 
 size_t page_size();
-
-#ifdef __cplusplus
- }
-}
-#ifndef KALLOK_PREFIX
-#define KALLOK_PREFIX kallok::
-#endif
-#else
-#ifndef KALLOK_PREFIX
-#define KALLOK_PREFIX /* */
-#endif
-#endif
 
 #endif //KALLOK_PAGES_H

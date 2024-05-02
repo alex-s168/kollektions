@@ -9,11 +9,6 @@
 #include <stdbool.h>
 #include "../attrib.h"
 
-#ifdef __cplusplus
-namespace kallok {
-extern "C" {
-#endif
-
 static size_t makeMultiple(size_t x, size_t y) {
     x += y - 1;
     x -= x % y;
@@ -95,14 +90,6 @@ static Ally createStandardAlloc(AllyStandardState *state) {
     Ally paged = getPageAlloc();
     return createBasicAlloc(state, paged);
 }
-
-#ifdef __cplusplus
-}
-}
-#define KALLOK_PREFIX kallok::
-#else
-#define KALLOK_PREFIX /* */
-#endif
 
 #include "pages.h"
 #include "virtual.h"

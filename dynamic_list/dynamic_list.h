@@ -1,10 +1,6 @@
 #ifndef KOLLEKTIONS_DYNAMIC_LIST_H
 #define KOLLEKTIONS_DYNAMIC_LIST_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 
 #include "../lists/AnyList.h"
@@ -17,7 +13,7 @@ struct DynamicList {
     size_t cap;
 
 INTERNAL
-    KALLOK_PREFIX Ally ally;
+    Ally ally;
 };
 
 // THE RETURNED LIST STILL DEPENDS ON THE LIST INPUT!!!
@@ -31,7 +27,7 @@ MutAnyList DynamicList_asAny(struct DynamicList *list);
  * @return 0 if ok
  */
 int DynamicList_init(struct DynamicList *list, size_t stride,
-                     KALLOK_PREFIX Ally ally, size_t initCap);
+                     Ally ally, size_t initCap);
 
 /**
  * @param list Self
@@ -108,9 +104,5 @@ int DynamicList_reserveExact(struct DynamicList *list, size_t additional);
  * @return 0 if ok
  */
 int DynamicList_shrink(struct DynamicList *list);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif //KOLLEKTIONS_DYNAMIC_LIST_H

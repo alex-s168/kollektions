@@ -11,7 +11,7 @@ static struct DoubleLinkedElement *allocElem(struct DoubleLinkedList *list) {
                                   sizeof(struct DoubleLinkedElement) + list->stride);
 }
 
-void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list, const struct DoubleLinkedElement *first, const struct DoubleLinkedElement *last, size_t stride, KALLOK_PREFIX Ally ally) {
+void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list, const struct DoubleLinkedElement *first, const struct DoubleLinkedElement *last, size_t stride, Ally ally) {
     list->ally = ally;
     list->stride = stride;
     if (first == NULL || last == NULL) {

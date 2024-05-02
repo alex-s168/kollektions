@@ -1,10 +1,6 @@
 #ifndef KOLLEKTIONS_LISTS_H
 #define KOLLEKTIONS_LISTS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "../kallok/kallok.h"
 #include "../fixed_list/fixed_list.h"
 #include "../dynamic_list/dynamic_list.h"
@@ -18,7 +14,7 @@ extern "C" {
  */
 void FixedList_copy(struct FixedList list,
                     struct DynamicList *dest,
-                    KALLOK_PREFIX Ally ally,
+                    Ally ally,
                     size_t additionalCap);
 
 /**
@@ -29,11 +25,7 @@ void FixedList_copy(struct FixedList list,
  */
 void DynamicList_copy(struct DynamicList list,
                       struct DynamicList *dest,
-                      KALLOK_PREFIX Ally ally,
+                      Ally ally,
                       size_t additionalCap);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif //KOLLEKTIONS_LISTS_H

@@ -5,10 +5,6 @@
 #ifndef KOLLEKTIONS_LINKED_LIST_H
 #define KOLLEKTIONS_LINKED_LIST_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stddef.h>
 
 #include "../dynamic_list/dynamic_list.h"
@@ -49,10 +45,10 @@ struct DoubleLinkedList {
     struct DoubleLinkedElement *end;
 
 INTERNAL
-    KALLOK_PREFIX Ally ally;
+    Ally ally;
 };
 
-static void DoubleLinkedList_init(struct DoubleLinkedList *list, size_t stride, KALLOK_PREFIX Ally ally) {
+static void DoubleLinkedList_init(struct DoubleLinkedList *list, size_t stride, Ally ally) {
     list->size = 0;
     list->stride = stride;
     list->start = NULL;
@@ -66,7 +62,7 @@ static void DoubleLinkedList_init(struct DoubleLinkedList *list, size_t stride, 
  * @param fixed
  */
 void DoubleLinkedList_fromFixed(struct DoubleLinkedList *list,
-                                KALLOK_PREFIX Ally ally,
+                                Ally ally,
                                 struct FixedList fixed);
 
 /**
@@ -81,7 +77,7 @@ void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list,
                                 const struct DoubleLinkedElement *first,
                                 const struct DoubleLinkedElement *last,
                                 size_t stride,
-                                KALLOK_PREFIX Ally ally);
+                                Ally ally);
 
 /**
  * Creates a new DoubleLinkedList and copies all the data from [src] into it.
@@ -91,7 +87,7 @@ void DoubleLinkedList_fromLinks(struct DoubleLinkedList *list,
  */
 static void DoubleLinkedList_copy(struct DoubleLinkedList *dest,
                                   struct DoubleLinkedList *src,
-                                  KALLOK_PREFIX Ally ally) {
+                                  Ally ally) {
     DoubleLinkedList_fromLinks(dest, src->start, src->end, src->stride, ally);
 }
 
@@ -168,9 +164,5 @@ void DoubleLinkedList_addAllFront(struct DoubleLinkedList *list, struct DoubleLi
  * @param dest The destination list where to add all the elements of this list
  */
 void DoubleLinkedList_flattenInto(struct DoubleLinkedList *list, struct DynamicList *dest);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif //KOLLEKTIONS_LINKED_LIST_H
