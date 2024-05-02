@@ -5,6 +5,7 @@
 #ifndef KALLOK_H
 #define KALLOK_H
 
+#include <assert.h>
 #include <string.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -98,6 +99,37 @@ typedef AllyDynamicBasicState AllyStandardState;
 static Ally createStandardAlloc(AllyStandardState *state) {
     Ally paged = getPageAlloc();
     return createBasicAlloc(state, paged);
+}
+
+typedef struct {
+    size_t refs;
+    size_t stride;
+    Ally   ally;
+} Rc;
+
+#define Rc_data(rc) (((char*)rc) + sizeof(Rc))
+static Rc *Rc_new(size_t stride, Ally ally) {
+    Rc *rc = (Rc*) yalloc(ally, sizeof(Rc) + stride);
+    if (rc == NULL)
+        return NULL;
+    rc->ally = ally;
+    rc->stride = stride;
+    rc->refs = 0;
+    return rc;
+}
+
+static void Rc_inc(Rc *rc) {
+    assert(rc != NULL);
+    rc->refs ++;
+}
+
+static void Rc_dec(Rc *rc) {
+    assert(rc != NULL);
+    assert(rc->refs != 0);
+    rc->refs --;
+    if (rc->refs == 0) {
+        yfree(rc->ally, rc, sizeof(Rc) + rc->stride);
+    }
 }
 
 #include "pages.h"
