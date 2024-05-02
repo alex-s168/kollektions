@@ -19,7 +19,7 @@ int DynamicList_insertAllAt(struct DynamicList *list, size_t index,
     {
         void *src = elem;
         void *dst = FixedList_get(list->fixed, index + len);
-        size_t am = list->fixed.len - index - len;
+        size_t am = list->fixed.len - index;
         memcpy(dst, src, am * list->fixed.stride);
     }
     {
@@ -28,5 +28,6 @@ int DynamicList_insertAllAt(struct DynamicList *list, size_t index,
         size_t am = len;
         memcpy(dst, src, am * list->fixed.stride);
     }
+    list->fixed.len += len;
     return 0;
 }
