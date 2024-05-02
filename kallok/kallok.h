@@ -5,6 +5,7 @@
 #ifndef KALLOK_H
 #define KALLOK_H
 
+#include <string.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include "../attrib.h"
@@ -31,6 +32,14 @@ typedef struct {
 #define yalloc(a, size)               a.impl->alloc(a.state, size)
 #define yrealloc(a, alloc, old, size) a.impl->realloc(a.state, alloc, old, size)
 #define yfree(a, alloc, old)          a.impl->free(a.state, alloc, old)
+
+static void *ycopy(Ally a, const void *src, size_t size) {
+    void *alloc = yalloc(a, size);
+    if (alloc == NULL)
+        return NULL;
+    memcpy(alloc, src, size);
+    return alloc;
+}
 
 Ally getLIBCAlloc();
 
