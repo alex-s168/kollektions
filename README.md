@@ -1,3 +1,5 @@
+# MERGED INTO [allib](https://github.com/alex-s168/allib)
+
 # Kollektions & Kallok
 Collection and memory allocator framework written in C.
 Tested on Linux and Windows.
