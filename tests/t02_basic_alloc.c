@@ -8,7 +8,7 @@
 
 int main() {
     static AllyDynamicBasicState state;
-    Ally ally = createBasicAlloc(&state, getPageAlloc());
+    Ally ally = createBasicAlloc(&state, false);
 
     void *a = yalloc(ally, 32);
     void *b = yalloc(ally, 64);

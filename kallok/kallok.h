@@ -9,7 +9,10 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdbool.h>
+
 #include "../attrib.h"
+#include "pages.h"
+#include "virtual.h"
 
 static size_t makeMultiple(size_t x, size_t y) {
     x += y - 1;
@@ -78,27 +81,35 @@ INTERNAL
 // A simple memory allocator that allocates elements in a fixed-length array.
 // Does not have any memory-defragmentation features
 Ally createFixedBasicAlloc(AllyFixedBasicState *state, void *data, size_t limit);
+bool isFixedBasicAllocEmpty(Ally);
 
 // Allocates full OS pages
 // useful for big lists
 Ally getPageAlloc();
 
 typedef struct {
+    AllyFixedBasicState fixed_state;
+    Ally fixed;
+    struct Page page;
+} AllyDynamicBasicEntry;
+
+typedef struct {
 INTERNAL
-    AllyFixedBasicState parent;
-    Ally parentAlly;
-    Ally source;
+    bool can_leak;
+    Ally paged;
+
+    AllyDynamicBasicEntry *entries;
+    size_t                 entries_len;
 } AllyDynamicBasicState;
 
 // Based on \see createFixedBasicAlloc
 // __Arena allocator__
-Ally createBasicAlloc(AllyDynamicBasicState *state, Ally source);
+Ally createBasicAlloc(AllyDynamicBasicState *state, bool can_leak);
 
 typedef AllyDynamicBasicState AllyStandardState;
 
 static Ally createStandardAlloc(AllyStandardState *state) {
-    Ally paged = getPageAlloc();
-    return createBasicAlloc(state, paged);
+    return createBasicAlloc(state, false);
 }
 
 typedef struct {

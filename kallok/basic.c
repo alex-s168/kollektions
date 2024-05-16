@@ -3,52 +3,64 @@
 //
 
 #include "kallok.h"
+#include "pages.h"
 #include <string.h>
-
-// TODO: compactify after free
-// TODO: wtf
 
 static void alloc_free(void *stateIn, void *alloc, size_t old) {
     AllyDynamicBasicState *state = stateIn;
-    yfree(state->parentAlly, alloc, old);
+
+    for (size_t i = 0; i < state->entries_len; i ++) {
+        AllyDynamicBasicEntry *entry = &state->entries[i];
+        if (alloc < entry->page.ptr)
+            continue;
+        void *end = entry->page.ptr + entry->page.size;
+        if (alloc >= end)
+            continue;
+
+        yfree(entry->fixed, alloc, old);
+
+        if (isFixedBasicAllocEmpty(entry->fixed)) {
+            free_page(entry->page);    
+            memcpy(entry, entry + 1, sizeof(AllyDynamicBasicEntry) * (state->entries_len - i - 1));
+            state->entries = yrealloc(state->paged, state->entries,
+                                      sizeof(AllyDynamicBasicEntry) * (state->entries_len --),
+                                      sizeof(AllyDynamicBasicEntry) * state->entries_len);
+        }
+
+        break;
+    }
 }
 
 static void *alloc_alloc(void *stateIn, size_t new) {
     AllyDynamicBasicState *state = stateIn;
-    
-    void *a = yalloc(state->parentAlly, new);
-    if (a != NULL)
-        return a;
 
-    {
-        void *r = yrealloc(state->source,
-                           state->parent.start,
-                           state->parent.len,
-                           state->parent.len + new + 32); // TODO: WE CAN'T JUST ASSUME 32 BYTES  !  ! !!!
-        if (r == NULL)
-            return NULL; 
-        memcpy(r, state->parent.start, state->parent.len);
-        yfree(state->source, state->parent.start, state->parent.len);
-        state->parent.start = r;
-        state->parent.len += new + 32;                                       // ^ ^ ^ ^
+    for (size_t i = 0; i < state->entries_len; i ++) {
+        AllyDynamicBasicEntry *entry = &state->entries[i];
+        void *alloc = yalloc(entry->fixed, new);
+        if (alloc != NULL) {
+            return alloc;
+        }
     }
 
-    return yalloc(state->parentAlly, new);
+    struct Page page = alloc_pages(new);
+    new = page.size;
+
+    state->entries = yrealloc(state->paged, state->entries,
+                              sizeof(AllyDynamicBasicEntry) * state->entries_len,
+                              sizeof(AllyDynamicBasicEntry) * (state->entries_len + 1));
+    AllyDynamicBasicEntry *entry = &state->entries[state->entries_len ++];
+
+    entry->page = page;
+    entry->fixed = createFixedBasicAlloc(&entry->fixed_state, page.ptr, page.size);
+
+    return yalloc(entry->fixed, new);
 }
 
 static void *alloc_realloc(void *stateIn, void *alloc, size_t old, size_t newSize) {
-    AllyDynamicBasicState *state = stateIn;
-    
-    void *a = yrealloc(state->parentAlly, alloc, old, newSize);
-    if (a != NULL)
-        return a;
-
-    void *b = alloc_alloc(stateIn, newSize);
-    if (b == NULL)
-        return NULL;
-    memcpy(b, alloc, old);
+    void *new = alloc_alloc(stateIn, newSize);
+    memcpy(new, alloc, old);
     alloc_free(stateIn, alloc, old);
-    return b;
+    return new;
 }
 
 static AllyImpl impl = {
@@ -57,8 +69,10 @@ static AllyImpl impl = {
     .realloc = alloc_realloc,
 };
 
-Ally createBasicAlloc(AllyDynamicBasicState *state, Ally source) {
-    state->parentAlly = createFixedBasicAlloc(&state->parent, NULL, 0);
-    state->source = source;
+Ally createBasicAlloc(AllyDynamicBasicState *state, bool can_leak) {
+    state->paged = getPageAlloc();
+    state->entries_len = 0;
+    state->entries = NULL;
+    state->can_leak = can_leak;
     return (Ally) { .state = state, .impl = &impl };
 }
