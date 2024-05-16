@@ -15,6 +15,9 @@
 #include "virtual.h"
 
 static size_t makeMultiple(size_t x, size_t y) {
+    if (x == 0)
+        return 0;
+
     x += y - 1;
     x -= x % y;
     return x;
@@ -142,8 +145,5 @@ static void Rc_dec(Rc *rc) {
         yfree(rc->ally, rc, sizeof(Rc) + rc->stride);
     }
 }
-
-#include "pages.h"
-#include "virtual.h"
 
 #endif //KALLOK_H

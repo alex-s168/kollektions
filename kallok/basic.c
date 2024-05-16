@@ -49,10 +49,12 @@ static void *alloc_alloc(void *stateIn, size_t new) {
                               sizeof(AllyDynamicBasicEntry) * state->entries_len,
                               sizeof(AllyDynamicBasicEntry) * (state->entries_len + 1));
     AllyDynamicBasicEntry *entry = &state->entries[state->entries_len ++];
-
     entry->page = page;
-    entry->fixed = createFixedBasicAlloc(&entry->fixed_state, page.ptr, page.size);
 
+    if (page.ptr == NULL)
+        return NULL;
+
+    entry->fixed = createFixedBasicAlloc(&entry->fixed_state, page.ptr, page.size);
     return yalloc(entry->fixed, new);
 }
 

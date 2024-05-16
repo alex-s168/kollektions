@@ -8,6 +8,7 @@
 
 static void paged_free(void *state, void *alloc, size_t old) {
     (void) state;
+
     old = makeMultiple(old, page_size());
     struct Page page;
     page.ptr = alloc;
@@ -29,8 +30,10 @@ static void *paged_realloc(void *state, void *alloc, size_t old, size_t new) {
         return alloc;
 
     void *newAlloc = paged_alloc(state, new);
-    memcpy(newAlloc, alloc, old);
-    paged_free(state, alloc, old);
+    if (old != 0 && alloc != NULL) {
+        memcpy(newAlloc, alloc, old);
+        paged_free(state, alloc, old);
+    }
     return newAlloc;
 }
 
